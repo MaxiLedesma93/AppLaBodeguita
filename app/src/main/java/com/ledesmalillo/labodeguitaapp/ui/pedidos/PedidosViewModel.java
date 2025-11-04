@@ -8,7 +8,7 @@ public class PedidosViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public PedidosViewModel() {
+    public  PedidosViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is pedidos fragment");
     }

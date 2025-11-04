@@ -20,8 +20,8 @@ public class UsuarioFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-       uvm  =
-                new ViewModelProvider(this).get(UsuarioViewModel.class);
+       uvm  = new ViewModelProvider(this).get(UsuarioViewModel.class);
+                //new ViewModelProvider(this).get(UsuarioViewModel.class);
         View root = inflater.inflate(R.layout.fragment_usuario, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
         uvm.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

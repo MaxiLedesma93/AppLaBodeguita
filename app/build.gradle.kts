@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ledesmalillo.labodeguitaapp"
-        minSdk = 26
+        minSdk = 33
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -44,6 +44,10 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
     implementation(libs.activity)
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.scalars)
+    implementation(libs.logging.interceptor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

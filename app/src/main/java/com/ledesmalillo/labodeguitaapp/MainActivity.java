@@ -2,6 +2,9 @@ package com.ledesmalillo.labodeguitaapp;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -13,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        iniciarHeader(navigationView);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.main_nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
@@ -58,5 +63,19 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.main_nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void iniciarHeader(NavigationView navigationView){
+        View header = navigationView.getHeaderView(0);
+
+        TextView nombre = header.findViewById(R.id.tvNombreHeader);
+        TextView direccion = header.findViewById(R.id.tvDireccionHeader);
+        TextView telefono = header.findViewById(R.id.tvTelefonoHeader);
+        //ImageView imageView = header.findViewById(R.id.imageView);
+
+        Usuario u = this.getIntent().getBundleExtra("usuario").getSerializable("usuario", Usuario.class);
+        nombre.setText(u.getNombre()+ " " + u.getApellido());
+        direccion.setText(u.getEmail()+"");
+        telefono.setText(u.getTelefono());
     }
 }

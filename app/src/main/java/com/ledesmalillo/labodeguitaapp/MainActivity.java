@@ -1,5 +1,6 @@
 package com.ledesmalillo.labodeguitaapp;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -73,7 +74,10 @@ public class MainActivity extends AppCompatActivity {
         TextView telefono = header.findViewById(R.id.tvTelefonoHeader);
         //ImageView imageView = header.findViewById(R.id.imageView);
 
-        Usuario u = this.getIntent().getBundleExtra("usuario").getSerializable("usuario", Usuario.class);
+        Usuario u = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            u = this.getIntent().getBundleExtra("usuario").getSerializable("usuario", Usuario.class);
+        }
         nombre.setText(u.getNombre()+ " " + u.getApellido());
         direccion.setText(u.getEmail()+"");
         telefono.setText(u.getTelefono());

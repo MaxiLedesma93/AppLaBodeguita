@@ -21,8 +21,9 @@ import retrofit2.http.POST;
 
 public class ApiClient {
     //ip maxi 192.168.1.35
-    //ip lula
-    private static final String URL = "http://192.168.1.35:5000/";
+    //ip lula 192.168.100.9
+    //private static final String URL = "http://192.168.1.35:5000/";
+    private static final String URL = "http://192.168.100.9:5000/";
 
     private static MisEndPoints mep;
     public static SharedPreferences sp;

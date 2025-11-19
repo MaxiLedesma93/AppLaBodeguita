@@ -13,11 +13,14 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public class ApiClient {
     //ip maxi 192.168.1.35
@@ -64,5 +67,9 @@ public class ApiClient {
         //Accede al perfil del usuario Logueado enviando el token en el header.
         @GET("usuario/perfil")
         Call<Usuario> get(@Header("Authorization") String authorization);
+
+        //Se usa en la vista de perfil
+        @PATCH("usuario/editar")
+        Call<Usuario> editarUsuario(@Header("Authorization") String token, @Body Usuario usuario);
     }
 }

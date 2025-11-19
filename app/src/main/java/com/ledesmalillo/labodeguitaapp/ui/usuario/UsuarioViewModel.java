@@ -20,10 +20,12 @@ public class UsuarioViewModel extends AndroidViewModel {
     private Context context;
     private MutableLiveData<Usuario> usuario;
     private MutableLiveData<Integer> guardar;
+
     public UsuarioViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
     }
+
     public MutableLiveData<Usuario> getUsuario() {
         if (usuario == null) {
             usuario = new MutableLiveData<>();
@@ -53,11 +55,32 @@ public class UsuarioViewModel extends AndroidViewModel {
                     Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }
 
+    public void editarDatos(Usuario u) {
+        SharedPreferences sp = ApiClient.conectar(context);
+        String t = sp.getString("token", "vacio");
+        Call<Usuario> usu = ApiClient.getEndPoints().editarUsuario(t, u);
+        usu.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+
+                if (response.isSuccessful()) {
+                    usuario.setValue(response.body());
+                    Toast.makeText(context, "Se editaron los datos con éxito", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                Toast.makeText(context, "Error al editar " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,8 +18,8 @@ import com.ledesmalillo.labodeguitaapp.R;
 public class UsuarioFragment extends Fragment {
 
     private UsuarioViewModel uvm;
-    private EditText etId, etNombre, etApellido, etMail, etDireccion, etTel, etContra;
-    private Button btGuardar;
+    private EditText etId, etNombre, etApellido, etMail, etDireccion, etTel;
+    private Button btGuardar, btEditar;
 
     public static UsuarioFragment newInstance() {
         return new UsuarioFragment();
@@ -62,6 +60,15 @@ public class UsuarioFragment extends Fragment {
 
         uvm.obtenerUsuario();
         return vistaPerfil;
+
+        btEditar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btGuardar.setVisibility(View.VISIBLE);
+                btEditar.setVisibility(View.GONE);
+            }
+        });
+
     }
     private void inicializarVista(View vistaPerfil) {
         etNombre = vistaPerfil.findViewById(R.id.etNombre);
@@ -69,8 +76,7 @@ public class UsuarioFragment extends Fragment {
         etMail = vistaPerfil.findViewById(R.id.etMail);
         etTel = vistaPerfil.findViewById(R.id.etTel);
         etDireccion = vistaPerfil.findViewById(R.id.etDireccion);
-        btGuardar = vistaPerfil.findViewById(R.id.btnGuardar);
-        etContra = vistaPerfil.findViewById(R.id.etContra);
+        btGuardar = vistaPerfil.findViewById(R.id.btnEditar);
         //editar habilita la edicion
            /* btEditar.setOnClickListener(new View.OnClickListener() {
                 @Override

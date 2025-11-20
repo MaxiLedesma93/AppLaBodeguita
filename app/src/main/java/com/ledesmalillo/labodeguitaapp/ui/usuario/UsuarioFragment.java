@@ -78,6 +78,9 @@ public class UsuarioFragment extends Fragment {
                 usuario.setEmail(binding.etMail.getText().toString());
                 usuario.setTelefono(binding.etTel.getText().toString());
                 usuario.setDireccion(binding.etDireccion.getText().toString());
+                //estos campos no son requeridos pero hay q mandarlos igual en vacio, sino falla el model state
+                usuario.setClave("");
+                usuario.setRol("");
                 binding.btnEditar.setVisibility(View.VISIBLE);
                 binding.btnGuardar.setVisibility(View.GONE);
                 uvm.editarDatos(usuario);

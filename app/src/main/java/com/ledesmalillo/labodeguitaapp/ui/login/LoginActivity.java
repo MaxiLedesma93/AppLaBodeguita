@@ -1,5 +1,6 @@
 package com.ledesmalillo.labodeguitaapp.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.ActivityLoginBinding;
+import com.ledesmalillo.labodeguitaapp.ui.usuario.RegistroActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,6 +41,15 @@ public class LoginActivity extends AppCompatActivity {
                 String pass = binding.etPassword.getText().toString();
                 vmLogin.Logueo(email, pass);
             }
+        });
+        binding.tvLinkRegistrarse.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegistroActivity.class);
+                startActivity(intent);
+            }
+
         });
     }
 }

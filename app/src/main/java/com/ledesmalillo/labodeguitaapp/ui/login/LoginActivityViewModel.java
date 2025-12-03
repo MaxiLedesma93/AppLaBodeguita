@@ -13,6 +13,7 @@ import androidx.lifecycle.AndroidViewModel;
 import com.ledesmalillo.labodeguitaapp.MainActivity;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
+import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioFragment;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,13 +22,14 @@ import retrofit2.Response;
 public class LoginActivityViewModel extends AndroidViewModel {
 
     private Context context;
+
     public LoginActivityViewModel(@NonNull Application application) {
 
         super(application);
         context = application.getApplicationContext();
     }
 
-    public void Logueo(String email, String password){
+    public void Logueo(String email, String password) {
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();
         Bundle bundle = new Bundle();
         Call<String> call = api.login(email, password);
@@ -35,12 +37,12 @@ public class LoginActivityViewModel extends AndroidViewModel {
             //en response.body() viene el token en un String.
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     SharedPreferences sp = ApiClient.conectar(context);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("token", "Bearer "+ response.body());
+                    editor.putString("token", "Bearer " + response.body());
                     editor.apply();
-                    Call<Usuario> callUsuario = api.get("Bearer "+response.body());
+                    Call<Usuario> callUsuario = api.get("Bearer " + response.body());
                     callUsuario.enqueue(new Callback<Usuario>() {
                         @Override
                         public void onResponse(Call<Usuario> call, Response<Usuario> response) {
@@ -56,7 +58,7 @@ public class LoginActivityViewModel extends AndroidViewModel {
                     });
 
 
-                }else {
+                } else {
                     Toast.makeText(context.getApplicationContext(), "Usuario y/o Contraseña Incorrectos",
                             Toast.LENGTH_LONG).show();
                 }
@@ -70,7 +72,7 @@ public class LoginActivityViewModel extends AndroidViewModel {
         });
     }
 
-    public void iniciarMenu(Bundle u){
+    public void iniciarMenu(Bundle u) {
 
 
         Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
@@ -78,5 +80,4 @@ public class LoginActivityViewModel extends AndroidViewModel {
         intent.putExtra("usuario", u);
         context.getApplicationContext().startActivity(intent);
     }
-
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.databinding.ActivityMainBinding;
+import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupWithNavController(navigationView, navController);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        // Obtienes una instancia del ViewModel cuyo ciclo de vida está atado a la Activity
+        UsuarioViewModel usuarioViewModel = new ViewModelProvider(this).get(UsuarioViewModel.class);
+
+        // Le ordenas al ViewModel que cargue los datos del usuario.
+        // Esto emitirá un estado que el UsuarioFragment (cuando esté visible) recibirá.
+        usuarioViewModel.cargarUsuarioExistente();
 
     }
 

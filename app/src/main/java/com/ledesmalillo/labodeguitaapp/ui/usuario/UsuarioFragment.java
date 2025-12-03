@@ -1,6 +1,8 @@
 package com.ledesmalillo.labodeguitaapp.ui.usuario;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +29,12 @@ public class UsuarioFragment extends Fragment {
         return new UsuarioFragment();
     }
 
+    @SuppressLint("WrongConstant")
+    //SE AGREGA REQUIREACTIVITY() en new ViewModelProvider() xq este fragment esta siendo compartido.
+    //(RegistroActivity y usuarioFragment lo utilizan.)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        uvm = new ViewModelProvider(this).get(UsuarioViewModel.class);
+        uvm = new ViewModelProvider(requireActivity()).get(UsuarioViewModel.class);
         binding = FragmentUsuarioBinding.inflate(inflater, container, false);
 
         //View root = inflater.inflate(R.layout.fragment_usuario, container, false);
@@ -41,20 +46,49 @@ public class UsuarioFragment extends Fragment {
             }
         });
         return root;*/
-        uvm.getUsuario().observe(getViewLifecycleOwner(), new Observer<Usuario>() {
-            @Override
-            public void onChanged(Usuario usuario) {
-                binding.etNombre.setText(usuario.getNombre());
-                binding.etApellido.setText(usuario.getApellido());
-                binding.etMail.setText(usuario.getEmail());
-                binding.etTel.setText(usuario.getTelefono());
-                binding.etDireccion.setText(usuario.getDireccion());
-
+        uvm.getEstado().observe(getViewLifecycleOwner(), estado -> {
+            Usuario usuario = estado.getUsuario();
+            Log.d("UsuarioFragment", "Usuario: " + usuario);
+            Log.d("isCamposHabilitados", String.valueOf(estado.isCamposHabilitados()));
+            binding.etNombre.setText(usuario.getNombre());
+            binding.etApellido.setText(usuario.getApellido());
+            binding.etMail.setText(usuario.getEmail());
+            binding.etTel.setText(usuario.getTelefono());
+            binding.etDireccion.setText(usuario.getDireccion());
+            binding.etNombre.setEnabled(estado.isCamposHabilitados());
+            binding.etApellido.setEnabled(estado.isCamposHabilitados());
+            binding.etMail.setEnabled(estado.isCamposHabilitados());
+            binding.etTel.setEnabled(estado.isCamposHabilitados());
+            binding.etDireccion.setEnabled(estado.isCamposHabilitados());
+            binding.btnEditar.setVisibility(estado.getVisibilidadBotonEditar());
+            binding.btnGuardar.setVisibility(estado.getVisibilidadBotonGuardar());
                /* Glide.with(getContext())
                         .load("http://192.168.0.104:5001/"+propietario.getAvatarUrl())
                         .diskCacheStrategy(DiskCacheStrategy.ALL) //cada vez q cargues imagen de propietario queda en cache
                         .into(ivProp); */
-            }
+
+        });
+        uvm.getEstadoNuevo().observe(getViewLifecycleOwner(), estadoNuevo -> {
+            Usuario usuario = estadoNuevo.getUsuario();
+            Log.d("UsuarioFragment", "Usuario: " + usuario);
+            Log.d("isCamposHabilitados", String.valueOf(estadoNuevo.isCamposHabilitados()));
+            binding.etNombre.setText(usuario.getNombre());
+            binding.etApellido.setText(usuario.getApellido());
+            binding.etMail.setText(usuario.getEmail());
+            binding.etTel.setText(usuario.getTelefono());
+            binding.etDireccion.setText(usuario.getDireccion());
+            binding.etNombre.setEnabled(estadoNuevo.isCamposHabilitados());
+            binding.etApellido.setEnabled(estadoNuevo.isCamposHabilitados());
+            binding.etMail.setEnabled(estadoNuevo.isCamposHabilitados());
+            binding.etTel.setEnabled(estadoNuevo.isCamposHabilitados());
+            binding.etDireccion.setEnabled(estadoNuevo.isCamposHabilitados());
+            binding.btnEditar.setVisibility(estadoNuevo.getVisibilidadBotonEditar());
+            binding.btnGuardar.setVisibility(estadoNuevo.getVisibilidadBotonGuardar());
+               /* Glide.with(getContext())
+                        .load("http://192.168.0.104:5001/"+propietario.getAvatarUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL) //cada vez q cargues imagen de propietario queda en cache
+                        .into(ivProp); */
+
         });
 
         binding.btnEditar.setOnClickListener(new View.OnClickListener() {
@@ -79,17 +113,17 @@ public class UsuarioFragment extends Fragment {
                 usuario.setTelefono(binding.etTel.getText().toString());
                 usuario.setDireccion(binding.etDireccion.getText().toString());
                 //estos campos no son requeridos pero hay q mandarlos igual en vacio, sino falla el model state
-                usuario.setClave("");
-                usuario.setRol("");
+                usuario.setClave(binding.etClave.getText().toString());
+                usuario.setEstado(true);
                 binding.btnEditar.setVisibility(View.VISIBLE);
                 binding.btnGuardar.setVisibility(View.GONE);
-                uvm.editarDatos(usuario);
+                uvm.guardarCambios(usuario);
 
             }
         });
 
 
-        uvm.obtenerUsuario();
+        //uvm.cargarUsuarioExistente();
         return binding.getRoot();
 
     }

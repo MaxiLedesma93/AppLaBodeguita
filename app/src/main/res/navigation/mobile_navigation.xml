@@ -6,7 +6,7 @@
     app:startDestination="@id/nav_pedidos">
     <fragment
         android:id="@+id/nav_perfil"
-        android:name="com.ledesmalillo.labodeguitaapp.ui.perfil.PerfilFragment"
+        android:name="com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioFragment"
         android:label="Mis datos"
         tools:layout="@layout/fragment_usuario" />
 
@@ -31,4 +31,9 @@
         android:name="com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoFragment"
         android:label="Carrito"
         tools:layout="@layout/fragment_carrito" />
+    <fragment
+        android:id="@+id/nav_producto"
+        android:name="com.ledesmalillo.labodeguitaapp.ui.productos.ProductoFragment"
+        android:label="fragment_producto"
+        tools:layout="@layout/fragment_producto" />
 </navigation>

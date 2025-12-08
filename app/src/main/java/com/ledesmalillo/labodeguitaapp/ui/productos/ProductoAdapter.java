@@ -47,17 +47,20 @@ public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewH
         //URL lula String URL = "http://192.168.100.9:5000/";
         String URL = "http://192.168.1.35:5000/";
         holder.tvNombreProducto.setText(p.getNombre());
-        holder.tvPrecioProducto.setText(p.getPrecio() != null ? p.getPrecio().toString() : "-" );
+        holder.tvPrecioProducto.setText(p.getPrecio() != null ? "$ " + p.getPrecio().toString() : "-" );
         Glide.with(root.getContext())
-                .load(URL + lista.get(position).getImagen())
+                .load(URL + lista.get(position).getFoto())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivFotoProducto);
-
+    }
+    public void actualizarProductos(List<Producto> nuevosProductos) {
+        this.lista = nuevosProductos;
+        notifyDataSetChanged(); // Notifica al RecyclerView que los datos han cambiado y debe redibujarse
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return lista.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

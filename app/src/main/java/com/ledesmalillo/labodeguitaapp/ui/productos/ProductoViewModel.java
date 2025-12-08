@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -21,16 +22,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductoViewModel extends ViewModel {
+public class ProductoViewModel extends AndroidViewModel {
     private MutableLiveData<List<Producto>> productos;
     private Context context;
 
     public ProductoViewModel(@NonNull Application application) {
-        super((Closeable) application);
+        super(application);
         context = application.getApplicationContext();
 
+
     }
-    public LiveData<List<Producto>> getProductos() {
+    public MutableLiveData<List<Producto>> getProductos() {
         if (productos == null) {
             productos = new MutableLiveData<>();
         }

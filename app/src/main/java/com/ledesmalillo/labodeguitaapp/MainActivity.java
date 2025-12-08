@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.databinding.ActivityMainBinding;
 import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewModel;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 

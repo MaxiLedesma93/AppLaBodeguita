@@ -1,0 +1,74 @@
+package com.ledesmalillo.labodeguitaapp.ui.productos;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
+import com.ledesmalillo.labodeguitaapp.R;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+
+import java.util.List;
+
+public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewHolder> {
+    private List<Producto> lista;
+    private View root;
+
+    private LayoutInflater layoutInflater;
+    public ProductoAdapter(List<Producto> lista, View root, LayoutInflater layoutInflater) {
+        this.lista = lista;
+        this.root = root;
+        this.layoutInflater = layoutInflater;
+    }
+
+    @NonNull
+    @Override
+    public ProductoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = layoutInflater.inflate(R.layout.item_producto, parent, false);
+        return new ViewHolder(view);
+
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ProductoAdapter.ViewHolder holder, int position) {
+        Producto p = lista.get(position);
+        //URL maxi String URL = "http://192.168.1.35:5000/";
+        //URL lula String URL = "http://192.168.100.9:5000/";
+        String URL = "http://192.168.1.35:5000/";
+        holder.tvNombreProducto.setText(p.getNombre());
+        holder.tvPrecioProducto.setText(p.getPrecio() != null ? p.getPrecio().toString() : "-" );
+        Glide.with(root.getContext())
+                .load(URL + lista.get(position).getImagen())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.ivFotoProducto);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private ImageView ivFotoProducto;
+        private TextView tvNombreProducto, tvPrecioProducto;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivFotoProducto = itemView.findViewById(R.id.ivFotoProducto);
+            tvNombreProducto = itemView.findViewById(R.id.tvNombreProducto);
+            tvPrecioProducto = itemView.findViewById(R.id.tvPrecioProducto);
+        }
+    }
+}

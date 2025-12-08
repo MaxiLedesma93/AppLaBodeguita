@@ -5,7 +5,10 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -87,6 +90,9 @@ public class ApiClient {
                                        @Part("clave")RequestBody clave,
                                        @Part("rol") RequestBody rol,
                                        @Part("estado") RequestBody estado);
+
+        @GET("producto/listar")
+        Call<List<Producto>> listaProductos(@Header("Authorization") String token);
 
     }
 }

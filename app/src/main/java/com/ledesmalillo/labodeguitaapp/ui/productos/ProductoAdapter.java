@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -52,10 +53,20 @@ public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewH
                 .load(URL + lista.get(position).getFoto())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.ivFotoProducto);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("producto", p);
+                Navigation.findNavController(root).navigate(R.id.productoDetalleFragment, bundle);
+
+            }
+        });
     }
     public void actualizarProductos(List<Producto> nuevosProductos) {
         this.lista = nuevosProductos;
-        notifyDataSetChanged(); // Notifica al RecyclerView que los datos han cambiado y debe redibujarse
+        // Notifica al RecyclerView que los datos han cambiado y debe redibujarse
+        notifyDataSetChanged();
     }
 
     @Override

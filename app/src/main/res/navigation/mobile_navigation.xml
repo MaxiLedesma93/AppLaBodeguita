@@ -34,6 +34,15 @@
     <fragment
         android:id="@+id/nav_producto"
         android:name="com.ledesmalillo.labodeguitaapp.ui.productos.ProductoFragment"
-        android:label="fragment_producto"
+        android:label="Lista de Productos"
         tools:layout="@layout/fragment_producto" />
+    <fragment
+        android:id="@+id/productoDetalleFragment"
+        android:name="com.ledesmalillo.labodeguitaapp.ui.productos.ProductoDetalleFragment"
+        android:label="Detalle del Producto"
+        tools:layout="@layout/fragment_producto_detalle" >
+        <action
+            android:id="@+id/action_productoDetalleFragment_to_nav_producto"
+            app:destination="@id/nav_producto" />
+    </fragment>
 </navigation>

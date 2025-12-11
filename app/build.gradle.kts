@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.cardview)
     implementation(libs.glide)
+    implementation(libs.annotations)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

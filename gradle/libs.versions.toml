@@ -15,6 +15,7 @@ retrofit_comSquareupRetrofit2 = "converter"
 converterScalars = "3.0.0"
 loggingInterceptor = "5.0.0-alpha.16"
 retrofit = "3.0.0"
+annotations = "4.16.0"
 legacySupportV4Version = "1.0.0"
 cardview = "1.0.0"
 glide = "4.16.0"
@@ -36,6 +37,7 @@ retrofit_com-squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "re
 converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "converterScalars" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+annotations = { group = "com.github.bumptech.glide", name = "annotations", version.ref = "annotations" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4Version" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }

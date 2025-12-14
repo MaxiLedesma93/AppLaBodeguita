@@ -45,4 +45,9 @@
             android:id="@+id/action_productoDetalleFragment_to_nav_producto"
             app:destination="@id/nav_producto" />
     </fragment>
+    <fragment
+        android:id="@+id/crearProductoFragment"
+        android:name="com.ledesmalillo.labodeguitaapp.ui.productos.CrearProductoFragment"
+        android:label="fragment_crear_producto"
+        tools:layout="@layout/fragment_crear_producto" />
 </navigation>

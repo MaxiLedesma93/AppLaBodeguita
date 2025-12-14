@@ -28,7 +28,8 @@ public class LoginActivityViewModel extends AndroidViewModel {
         super(application);
         context = application.getApplicationContext();
     }
-
+// en sharedPreferences debemos crear una cadena llamada ROl y guardar el rol del usuario.
+    // hacer una tabla de funcionalidades, y una de funcionalidad Rol para relacionar los roles con las funcionalidades.
     public void Logueo(String email, String password) {
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();
         Bundle bundle = new Bundle();

@@ -94,5 +94,15 @@ public class ApiClient {
         @GET("producto/listar")
         Call<List<Producto>> listaProductos(@Header("Authorization") String token);
 
+        @Multipart
+        @POST("producto/guardarproducto")
+        Call<Producto> altaProducto(@Header("Authorization") String token,
+                                   @Part MultipartBody.Part imagen,
+                                   @Part("nombre") RequestBody nombre,
+                                   @Part("descripcion") RequestBody descripcion,
+                                   @Part("precio") RequestBody precio,
+                                   @Part("estado") RequestBody estado);
+
+
     }
 }

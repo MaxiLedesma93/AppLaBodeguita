@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,10 +49,12 @@ public class ProductoFragment extends Fragment {
                 adapter.actualizarProductos(productos);
             }
         });
-
-
-
-
+        binding.fabAgregarProducto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.crearProductoFragment);
+            }
+        });
         return binding.getRoot();
     }
 

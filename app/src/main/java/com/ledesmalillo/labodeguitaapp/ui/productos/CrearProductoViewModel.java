@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -19,7 +21,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.Modelos.RealPathUtil;
+
+import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
+import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewState;
+
 
 import java.io.File;
 
@@ -34,6 +40,9 @@ public class CrearProductoViewModel extends AndroidViewModel {
     private MutableLiveData<Uri> uriMutableLiveData;
     private Uri uri;
     private MutableLiveData<Bitmap> mFoto;
+    private  MutableLiveData<ProductoViewState> estado = new MutableLiveData<>();
+    private  MutableLiveData<ProductoViewState> estadoNuevo = new MutableLiveData<>();
+    private Producto productoOriginal; // Para guardar el producto que estamos editando
 
     private Context context;
     public CrearProductoViewModel(@NonNull Application application) {
@@ -52,44 +61,108 @@ public class CrearProductoViewModel extends AndroidViewModel {
         }
         return mFoto;
     }
-    public void guardarProducto(String nombreProducto, String precioProducto,
-                                String descripcionProducto, boolean estadoProducto, Uri uriImagen){
-        SharedPreferences sp = ApiClient.conectar(context);
-        String token = sp.getString("token", "no token");
-        String rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
-        File archivo = new File(rutaArchivo);
 
-        RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
-        RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), precioProducto);
-        RequestBody precio = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
-        RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
-        RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
-        MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
-
-
-
-        Call<Producto> productoCall = ApiClient.getEndPoints().altaProducto(token,  imagenFile,
-                nombre, descripcion, precio, estado);
-        productoCall.enqueue(new Callback<Producto>() {
-            @Override
-            public void onResponse(Call<Producto> call, Response<Producto> response) {
-                Toast.makeText(context, "Producto creado con Extio", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<Producto> call, Throwable throwable) {
-                Toast.makeText(context, "Error al guardar Producto"+ throwable.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("salida",throwable.getMessage());
-            }
-        });
-
+    public MutableLiveData<ProductoViewState> getEstado() {
+        if(estado == null){
+            estado = new MutableLiveData<>();
+        }
+        return estado;
     }
+
     public void recibirFoto(ActivityResult result) {
         if (result.getResultCode() == RESULT_OK) {
             Intent data = result.getData();
             uri = data.getData();
             uriMutableLiveData.setValue(uri);
         }
+    }
+
+    public void iniciar(Bundle arguments) {
+        if (arguments != null && arguments.containsKey("producto_para_editar")) {
+            // MODO EDITAR
+            this.productoOriginal = (Producto) arguments.getSerializable("producto_para_editar");
+            // Creamos un ViewState a partir del producto existente
+            ProductoViewState estadoDeEdicion = new ProductoViewState(
+                    productoOriginal.getNombre(),
+                    productoOriginal.getDescripcion(),
+                    productoOriginal.getPrecio() != null ? productoOriginal.getPrecio().toString() : "",
+                    "http://192.168.1.35:5000/" + productoOriginal.getFoto()
+            );
+            Log.d("URL FOTO " , "http://192.168.1.35:5000/" + productoOriginal.getFoto());
+            estado.setValue(estadoDeEdicion);
+        } else {
+            // MODO CREAR
+            this.productoOriginal = null;
+            // Creamos un ViewState con valores por defecto (vacíos)
+            ProductoViewState estadoDeCreacion = new ProductoViewState("", "", "", null);
+            estado.setValue(estadoDeCreacion);
+        }
+    }
+    public void guardarProducto(String nombreProducto, String descripcionProducto,
+                                boolean estadoProducto, Uri uriImagen, String precioProducto) {
+        if (productoOriginal != null) {
+            SharedPreferences sp = ApiClient.conectar(context);
+            String token = sp.getString("token", "no token");
+            String rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
+            File archivo = new File(rutaArchivo);
+            RequestBody id = RequestBody.create(MediaType.parse("application/json"), String.valueOf(productoOriginal.getId()));
+            RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
+            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), precioProducto);
+            RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
+            RequestBody foto = RequestBody.create(MediaType.parse("application/json"), rutaArchivo);
+            RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
+            RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
+            MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
+
+
+
+            Call<Producto> productoCall = ApiClient.getEndPoints().editarProducto(token,  imagenFile,
+                    nombre, descripcion, precio, foto, estado, id);
+            productoCall.enqueue(new Callback<Producto>() {
+                @Override
+                public void onResponse(Call<Producto> call, Response<Producto> response) {
+                    Toast.makeText(context, "Producto Editado con Exito", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Call<Producto> call, Throwable throwable) {
+                    Toast.makeText(context, "Error al editar Producto"+ throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("salida",throwable.getMessage());
+                }
+            });
+
+            // Log.d("ViewModel", "Actualizando producto: " + productoOriginal.getId());
+        } else {
+            SharedPreferences sp = ApiClient.conectar(context);
+            String token = sp.getString("token", "no token");
+            String rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
+            File archivo = new File(rutaArchivo);
+
+            RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
+            RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), precioProducto);
+            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
+            RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
+            RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
+            MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
+
+
+
+            Call<Producto> productoCall = ApiClient.getEndPoints().altaProducto(token,  imagenFile,
+                    nombre, descripcion, precio, estado);
+            productoCall.enqueue(new Callback<Producto>() {
+                @Override
+                public void onResponse(Call<Producto> call, Response<Producto> response) {
+                    Toast.makeText(context, "Producto Guardado con Exito", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Call<Producto> call, Throwable throwable) {
+                    Toast.makeText(context, "Error al guardar Producto"+ throwable.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("salida",throwable.getMessage());
+                }
+            });
+        }
+        // Aquí podrías emitir un nuevo estado para indicar "Guardado con éxito" o navegar hacia atrás.
     }
 
 }

@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_productoDetalleFragment_to_nav_producto"
             app:destination="@id/nav_producto" />
+        <action
+            android:id="@+id/action_productoDetalleFragment_to_crearProductoFragment"
+            app:destination="@id/crearProductoFragment" />
     </fragment>
     <fragment
         android:id="@+id/crearProductoFragment"

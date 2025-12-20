@@ -16,10 +16,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentCrearProductoBinding;
 
@@ -45,11 +48,30 @@ public class CrearProductoFragment extends Fragment {
         binding = FragmentCrearProductoBinding.inflate(getLayoutInflater());
         mViewModel = new ViewModelProvider(this).get(CrearProductoViewModel.class);
         abrirGaleria();
+        mViewModel.iniciar(getArguments());
         mViewModel.getUriMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
             @Override
             public void onChanged(Uri uri) {
                 binding.ivFotoProducto.setImageURI(uri);
                 uriImagen =uri;
+            }
+        });
+        mViewModel.getEstado().observe(getViewLifecycleOwner(), new Observer<ProductoViewState>() {
+            @Override
+            public void onChanged(ProductoViewState estado) {
+                // El Fragment no piensa, solo obedece al ViewState
+                String URL = "http://192.168.1.35:5000/";
+                binding.etNombreProducto.setText(estado.getNombre());
+                binding.etDescripcionProducto.setText(estado.getDescripcion());
+                binding.etPrecioProducto.setText(estado.getPrecio());
+                Glide.with(getContext())
+                        .load(estado.getFotoUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(binding.ivFotoProducto);
+                Log.d("URL FOTO VISTA" , estado.getFotoUrl());
+
+
+
             }
         });
 
@@ -68,7 +90,7 @@ public class CrearProductoFragment extends Fragment {
                 String descripcion = binding.etDescripcionProducto.getText().toString();
                 String precio = binding.etPrecioProducto.getText().toString();
                 Boolean estado = true;
-                mViewModel.guardarProducto(nombre, descripcion, precio, estado, uriImagen);
+                mViewModel.guardarProducto(nombre, descripcion, estado, uriImagen, precio);
             }
         });
         return binding.getRoot();

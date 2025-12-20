@@ -28,6 +28,7 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public class ApiClient {
     //ip maxi 192.168.1.35
@@ -103,6 +104,18 @@ public class ApiClient {
                                    @Part("precio") RequestBody precio,
                                    @Part("estado") RequestBody estado);
 
+        @GET("producto/${id}")
+        Call<Producto> getProducto(@Header("Authorization") String token, @Path("id") int id);
+        @Multipart
+        @PATCH("producto/editarproducto")
+        Call<Producto> editarProducto(@Header("Authorization") String token,
+                                      @Part MultipartBody.Part imagen,
+                                      @Part("nombre") RequestBody nombre,
+                                      @Part("descripcion") RequestBody descripcion,
+                                      @Part("precio") RequestBody precio,
+                                      @Part("foto") RequestBody foto,
+                                      @Part("estado") RequestBody estado,
+                                      @Part("id") RequestBody id);
 
     }
 }

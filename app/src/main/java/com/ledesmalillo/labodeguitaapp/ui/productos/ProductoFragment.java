@@ -39,7 +39,7 @@ public class ProductoFragment extends Fragment {
         rvProductos = binding.rvProductos;
         mViewModel.mostrarProductos();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),
-                2, GridLayoutManager.VERTICAL, false);
+                1, GridLayoutManager.VERTICAL, false);
         rvProductos.setLayoutManager(gridLayoutManager);
         adapter = new ProductoAdapter(new ArrayList<>(), binding.getRoot(), getLayoutInflater());
         rvProductos.setAdapter(adapter);

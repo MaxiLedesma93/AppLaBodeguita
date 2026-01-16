@@ -15,47 +15,63 @@
     app:contentPadding="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="130dp"
-        android:layout_height="229dp"
+        android:layout_width="363dp"
+        android:layout_height="211dp"
         android:background="#FAFAFA"
         android:backgroundTint="#DFDFDF">
 
+
         <TextView
             android:id="@+id/tvNombreProducto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textAlignment="center"
+            android:layout_width="197dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivFotoProducto"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <ImageView
             android:id="@+id/ivFotoProducto"
-            android:layout_width="110dp"
-            android:layout_height="97dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="115dp"
+            android:layout_height="107dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
             android:textAlignment="center"
             app:flow_horizontalAlign="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNombreProducto"
+            app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tvPrecioProducto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_width="157dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="16dp"
             android:text="TextView"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="#000000"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.077"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivFotoProducto" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDescripcionProducto" />
+
+        <TextView
+            android:id="@+id/tvDescripcionProducto"
+            android:layout_width="205dp"
+            android:layout_height="77dp"
+            android:layout_marginTop="12dp"
+            android:text="TextView"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toStartOf="@+id/ivFotoProducto"
+            app:layout_constraintHorizontal_bias="0.41"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNombreProducto" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

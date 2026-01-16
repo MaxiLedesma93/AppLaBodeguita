@@ -50,6 +50,7 @@ public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewH
         String URL = "http://192.168.1.35:5000/";
         holder.tvNombreProducto.setText(p.getNombre());
         holder.tvPrecioProducto.setText(p.getPrecio() != null ? "$ " + p.getPrecio().toString() : "-" );
+        holder.tvDescripcionProducto.setText(p.getDescripcion());
         Glide.with(root.getContext())
                 .load(URL + lista.get(position).getFoto())
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
@@ -78,13 +79,14 @@ public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewH
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivFotoProducto;
-        private TextView tvNombreProducto, tvPrecioProducto;
+        private TextView tvNombreProducto, tvPrecioProducto, tvDescripcionProducto;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivFotoProducto = itemView.findViewById(R.id.ivFotoProducto);
             tvNombreProducto = itemView.findViewById(R.id.tvNombreProducto);
             tvPrecioProducto = itemView.findViewById(R.id.tvPrecioProducto);
+            tvDescripcionProducto = itemView.findViewById(R.id.tvDescripcionProducto);
         }
     }
 }

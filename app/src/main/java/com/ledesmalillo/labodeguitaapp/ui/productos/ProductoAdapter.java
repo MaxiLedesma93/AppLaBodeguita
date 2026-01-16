@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.ObjectKey;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
 import android.os.Bundle;
@@ -51,7 +52,8 @@ public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewH
         holder.tvPrecioProducto.setText(p.getPrecio() != null ? "$ " + p.getPrecio().toString() : "-" );
         Glide.with(root.getContext())
                 .load(URL + lista.get(position).getFoto())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
+                .skipMemoryCache(true)
                 .into(holder.ivFotoProducto);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

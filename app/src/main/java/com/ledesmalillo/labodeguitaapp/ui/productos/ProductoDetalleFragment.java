@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.ObjectKey;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentProductoDetalleBinding;
@@ -45,6 +46,8 @@ public class ProductoDetalleFragment extends Fragment {
                 binding.tvDetProductoPrecio.setText(producto.getPrecio() != null ? "Precio: $ " + producto.getPrecio().toString() : "-" );
                 Glide.with(binding.getRoot().getContext())
                         .load(URL + producto.getFoto())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
+                        .skipMemoryCache(true)
                         .into(binding.ivDetProductoFoto);
             }
         });

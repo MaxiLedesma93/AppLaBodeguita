@@ -66,14 +66,19 @@ public class CrearProductoFragment extends Fragment {
                 binding.etPrecioProducto.setText(estado.getPrecio());
                 Glide.with(getContext())
                         .load(estado.getFotoUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
+                        .skipMemoryCache(true)
                         .into(binding.ivFotoProducto);
-                Log.d("URL FOTO VISTA" , estado.getFotoUrl());
-
-
-
             }
         });
+        /*mViewModel.getUriMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
+                    @Override
+                    public void onChanged(Uri uri) {
+                        binding.ivFotoProducto.setImageURI(uri);
+                    }
+                });
+
+         */
 
 
         binding.btnImagen.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +93,7 @@ public class CrearProductoFragment extends Fragment {
             public void onClick(View view) {
                 String nombre = binding.etNombreProducto.getText().toString();
                 String descripcion = binding.etDescripcionProducto.getText().toString();
-                String precio = binding.etPrecioProducto.getText().toString();
+                Double precio = Double.valueOf(binding.etPrecioProducto.getText().toString());
                 Boolean estado = true;
                 mViewModel.guardarProducto(nombre, descripcion, estado, uriImagen, precio);
             }

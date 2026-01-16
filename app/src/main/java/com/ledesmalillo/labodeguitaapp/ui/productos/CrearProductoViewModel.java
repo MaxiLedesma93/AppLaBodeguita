@@ -28,6 +28,7 @@ import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewState;
 
 
 import java.io.File;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -89,6 +90,7 @@ public class CrearProductoViewModel extends AndroidViewModel {
                     "http://192.168.1.35:5000/" + productoOriginal.getFoto()
             );
             Log.d("URL FOTO " , "http://192.168.1.35:5000/" + productoOriginal.getFoto());
+            arguments.clear();
             estado.setValue(estadoDeEdicion);
         } else {
             // MODO CREAR
@@ -99,20 +101,37 @@ public class CrearProductoViewModel extends AndroidViewModel {
         }
     }
     public void guardarProducto(String nombreProducto, String descripcionProducto,
-                                boolean estadoProducto, Uri uriImagen, String precioProducto) {
+                                boolean estadoProducto, Uri uriImagen, Double precioProducto) {
         if (productoOriginal != null) {
             SharedPreferences sp = ApiClient.conectar(context);
             String token = sp.getString("token", "no token");
-            String rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
-            File archivo = new File(rutaArchivo);
+            String rutaArchivo = "";
+            // para evitar el error de null en uriImagen cuando no cambia la uriImagen,
+            // creamos los parametros en null. esto sucedia si no editabamos la imagen.
+            // y solo los seteamos si uriImagen != null
+            RequestBody imagenBody = null;
+            MultipartBody.Part imagenFile = null;
+            // para evitar que al precio se le agregue un 0 que es el que esta luego del .
+            // reemplazamos el . por la ,
+            String precioConPunto = String.valueOf(precioProducto); // Ejemplo: "10.0"
+            String precioConComa = precioConPunto.replace('.', ','); // Resultado: "10,0"
+
+
+            if(uriImagen != null){
+                rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
+                File archivo = new File(rutaArchivo);
+                imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
+                imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
+
+
+            }
+
             RequestBody id = RequestBody.create(MediaType.parse("application/json"), String.valueOf(productoOriginal.getId()));
             RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
-            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), precioProducto);
+            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), precioConComa);
             RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
             RequestBody foto = RequestBody.create(MediaType.parse("application/json"), rutaArchivo);
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
-            RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
-            MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
 
 
 
@@ -139,8 +158,8 @@ public class CrearProductoViewModel extends AndroidViewModel {
             File archivo = new File(rutaArchivo);
 
             RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
-            RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), precioProducto);
-            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
+            RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
+            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), String.valueOf(precioProducto));
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
             RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
             MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);

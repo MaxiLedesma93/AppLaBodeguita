@@ -80,12 +80,12 @@
         android:id="@+id/btnGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
         android:backgroundTint="#FF6E40"
         android:text="Guardar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPrecioProducto" />
+        app:layout_constraintTop_toBottomOf="@+id/rgTipoProducto" />
 
     <Button
         android:id="@+id/btnImagen"
@@ -97,5 +97,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivFotoProducto" />
+
+    <RadioGroup
+        android:id="@+id/rgTipoProducto"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginTop="23dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPrecioProducto">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="166dp"
+            android:layout_height="match_parent"
+            android:text="Comida"
+            android:tag="Comida" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="178dp"
+            android:layout_height="match_parent"
+            android:text="Bebida"
+            android:tag="Bebida"/>
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

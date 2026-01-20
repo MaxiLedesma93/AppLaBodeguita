@@ -9,13 +9,16 @@ public class ProductoViewState implements Serializable {
         private final String descripcion;
         private final String precio;
         private final String fotoUrl;
+        private final int idTipo;
 
         // Constructor
-        public ProductoViewState(String nombre, String descripcion, String precio, String fotoUrl) {
+        public ProductoViewState(String nombre, String descripcion, String precio, String fotoUrl,
+                                 int idTipo) {
             this.nombre = nombre;
             this.descripcion = descripcion;
             this.precio = precio;
             this.fotoUrl = fotoUrl;
+            this.idTipo = idTipo;
         }
 
         // Getters para todos los campos
@@ -33,5 +36,9 @@ public class ProductoViewState implements Serializable {
 
         public String getFotoUrl() {
             return fotoUrl;
+        }
+
+        public int getTipo() {
+            return idTipo;
         }
 }

@@ -13,23 +13,24 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ledesmalillo.labodeguitaapp.R;
+import com.ledesmalillo.labodeguitaapp.databinding.FragmentPedidosBinding;
 
 public class PedidosFragment extends Fragment {
 
     private PedidosViewModel pedidosViewModel;
+    private FragmentPedidosBinding binding;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         pedidosViewModel =
                 new ViewModelProvider(this).get(PedidosViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_pedidos, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        pedidosViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        return root;
+        binding = FragmentPedidosBinding.inflate(inflater, container, false);
+
+
+
+
+
+        return binding.getRoot();
     }
 }

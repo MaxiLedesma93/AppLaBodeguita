@@ -87,21 +87,26 @@ public class CrearProductoViewModel extends AndroidViewModel {
                     productoOriginal.getNombre(),
                     productoOriginal.getDescripcion(),
                     productoOriginal.getPrecio() != null ? productoOriginal.getPrecio().toString() : "",
-                    "http://192.168.1.35:5000/" + productoOriginal.getFoto()
+                    "http://192.168.1.35:5000/" + productoOriginal.getFoto(),
+                    productoOriginal.getIdTipo()
             );
-            Log.d("URL FOTO " , "http://192.168.1.35:5000/" + productoOriginal.getFoto());
+            //Log.d("URL FOTO " , "http://192.168.1.35:5000/" + productoOriginal.getFoto());
             arguments.clear();
             estado.setValue(estadoDeEdicion);
         } else {
             // MODO CREAR
             this.productoOriginal = null;
             // Creamos un ViewState con valores por defecto (vacíos)
-            ProductoViewState estadoDeCreacion = new ProductoViewState("", "", "", null);
+            ProductoViewState estadoDeCreacion = new ProductoViewState("", "", "","", 0);
             estado.setValue(estadoDeCreacion);
         }
     }
     public void guardarProducto(String nombreProducto, String descripcionProducto,
-                                boolean estadoProducto, Uri uriImagen, Double precioProducto) {
+                                boolean estadoProducto, Uri uriImagen, Double precioProducto,
+                                String tipoProducto) {
+        //buscar en la tabla tipo de la bd la descripcion que coincida con el string tipo
+        //asignarle el id del registro encontrado al idTipoProducto
+        int idTipoProducto = 0;
         if (productoOriginal != null) {
             SharedPreferences sp = ApiClient.conectar(context);
             String token = sp.getString("token", "no token");
@@ -132,11 +137,13 @@ public class CrearProductoViewModel extends AndroidViewModel {
             RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
             RequestBody foto = RequestBody.create(MediaType.parse("application/json"), rutaArchivo);
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
+            RequestBody tipo = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idTipoProducto));
+
 
 
 
             Call<Producto> productoCall = ApiClient.getEndPoints().editarProducto(token,  imagenFile,
-                    nombre, descripcion, precio, foto, estado, id);
+                    nombre, descripcion, precio, foto, estado,tipo, id);
             productoCall.enqueue(new Callback<Producto>() {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {
@@ -163,11 +170,12 @@ public class CrearProductoViewModel extends AndroidViewModel {
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
             RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
             MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
+            RequestBody tipo = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idTipoProducto));
 
 
 
             Call<Producto> productoCall = ApiClient.getEndPoints().altaProducto(token,  imagenFile,
-                    nombre, descripcion, precio, estado);
+                    nombre, descripcion, precio, tipo, estado);
             productoCall.enqueue(new Callback<Producto>() {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {

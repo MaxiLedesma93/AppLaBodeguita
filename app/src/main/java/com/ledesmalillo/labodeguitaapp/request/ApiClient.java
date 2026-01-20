@@ -102,7 +102,10 @@ public class ApiClient {
                                    @Part("nombre") RequestBody nombre,
                                    @Part("descripcion") RequestBody descripcion,
                                    @Part("precio") RequestBody precio,
+                                   @Part("tipo") RequestBody tipo,
                                    @Part("estado") RequestBody estado);
+
+
 
         @GET("producto/${id}")
         Call<Producto> getProducto(@Header("Authorization") String token, @Path("id") int id);
@@ -115,6 +118,7 @@ public class ApiClient {
                                       @Part("precio") RequestBody precio,
                                       @Part("foto") RequestBody foto,
                                       @Part("estado") RequestBody estado,
+                                      @Part("tipo") RequestBody tipo,
                                       @Part("id") RequestBody id);
 
     }

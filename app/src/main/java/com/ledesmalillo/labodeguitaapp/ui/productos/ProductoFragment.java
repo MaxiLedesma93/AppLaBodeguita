@@ -37,6 +37,7 @@ public class ProductoFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ProductoViewModel.class);
         binding = FragmentProductoBinding.inflate(getLayoutInflater());
         rvProductos = binding.rvProductos;
+        //aca en vez de mostrarProductos, pediriamos bebidas o comidas.
         mViewModel.mostrarProductos();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),
                 1, GridLayoutManager.VERTICAL, false);
@@ -47,6 +48,22 @@ public class ProductoFragment extends Fragment {
             @Override
             public void onChanged(List<Producto> productos) {
                 adapter.actualizarProductos(productos);
+            }
+        });
+        binding.btnComida.setSelected(true);
+        binding.btnComida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.btnComida.setSelected(true);
+                binding.btnBebida.setSelected(false);
+
+            }
+        });
+        binding.btnBebida.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.btnComida.setSelected(false);
+                binding.btnBebida.setSelected(true);
             }
         });
         binding.fabAgregarProducto.setOnClickListener(new View.OnClickListener() {

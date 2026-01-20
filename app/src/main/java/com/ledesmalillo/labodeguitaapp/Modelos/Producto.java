@@ -10,12 +10,13 @@ public class Producto implements Serializable {
     private Boolean estado;
     private byte[] imagen;
     private String descripcion;
+    private int idTipo;
 
     public Producto() {
     }
 
     public Producto(int id, String nombre, Double precio, String foto, Boolean estado, byte[] imagen,
-                    String descripcion) {
+                    String descripcion, int idTipo) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -23,7 +24,10 @@ public class Producto implements Serializable {
         this.estado = estado;
         this.imagen = imagen;
         this.descripcion = descripcion;
+        this.idTipo = idTipo;
     }
+
+
 
     public int getId() {
         return id;
@@ -79,5 +83,12 @@ public class Producto implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+    public int getIdTipo() {
+        return idTipo;
+    }
+
+    public void setTipo(int idTipo) {
+        this.idTipo = idTipo;
     }
 }

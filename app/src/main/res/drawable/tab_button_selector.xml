@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Cuando el botón está seleccionado, muestra el subrayado -->
+    <item android:state_selected="true" android:drawable="@drawable/button_underline_indicator"/>
+    <!-- Cuando no está seleccionado, no muestra nada -->
+    <item android:drawable="@android:color/transparent" />
+</selector>

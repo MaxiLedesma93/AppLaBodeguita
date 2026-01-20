@@ -95,7 +95,10 @@ public class CrearProductoFragment extends Fragment {
                 String descripcion = binding.etDescripcionProducto.getText().toString();
                 Double precio = Double.valueOf(binding.etPrecioProducto.getText().toString());
                 Boolean estado = true;
-                mViewModel.guardarProducto(nombre, descripcion, estado, uriImagen, precio);
+                int idSeleccionado = binding.rgTipoProducto.getCheckedRadioButtonId();
+                String tipo = binding.rgTipoProducto.findViewById(idSeleccionado).getTag().toString();
+
+                mViewModel.guardarProducto(nombre, descripcion, estado, uriImagen, precio, tipo);
             }
         });
         return binding.getRoot();

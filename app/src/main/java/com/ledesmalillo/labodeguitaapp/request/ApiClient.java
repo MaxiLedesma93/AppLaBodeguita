@@ -102,7 +102,7 @@ public class ApiClient {
                                    @Part("nombre") RequestBody nombre,
                                    @Part("descripcion") RequestBody descripcion,
                                    @Part("precio") RequestBody precio,
-                                   @Part("tipo") RequestBody tipo,
+                                   @Part("tipoproducto") RequestBody tipoProducto,
                                    @Part("estado") RequestBody estado);
 
 
@@ -118,7 +118,7 @@ public class ApiClient {
                                       @Part("precio") RequestBody precio,
                                       @Part("foto") RequestBody foto,
                                       @Part("estado") RequestBody estado,
-                                      @Part("tipo") RequestBody tipo,
+                                      @Part("tipoproducto") RequestBody tipoProducto,
                                       @Part("id") RequestBody id);
 
     }

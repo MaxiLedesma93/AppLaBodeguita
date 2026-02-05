@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -60,6 +61,8 @@ public class CrearProductoFragment extends Fragment {
             @Override
             public void onChanged(ProductoViewState estado) {
                 // El Fragment no piensa, solo obedece al ViewState
+                //en caso de ser creacion estado.getNombre() == "".
+                //En caso de edicion, estado.getNombre() va a traer el dato del producto a editar.
                 String URL = "http://192.168.1.35:5000/";
                 binding.etNombreProducto.setText(estado.getNombre());
                 binding.etDescripcionProducto.setText(estado.getDescripcion());
@@ -69,6 +72,9 @@ public class CrearProductoFragment extends Fragment {
                         .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
                         .skipMemoryCache(true)
                         .into(binding.ivFotoProducto);
+                View rbAsociado = binding.rgTipoProducto.findViewWithTag(estado.getTipo());
+                binding.rgTipoProducto.check(rbAsociado.getId());
+
             }
         });
         /*mViewModel.getUriMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {

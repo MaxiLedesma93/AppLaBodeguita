@@ -82,13 +82,20 @@ public class CrearProductoViewModel extends AndroidViewModel {
         if (arguments != null && arguments.containsKey("producto_para_editar")) {
             // MODO EDITAR
             this.productoOriginal = (Producto) arguments.getSerializable("producto_para_editar");
+            String descTipo;
+            if(productoOriginal.getIdTipo() == 1){
+                descTipo = "Comida";
+            }else{
+                descTipo = "Bebida";
+            }
             // Creamos un ViewState a partir del producto existente
             ProductoViewState estadoDeEdicion = new ProductoViewState(
                     productoOriginal.getNombre(),
                     productoOriginal.getDescripcion(),
                     productoOriginal.getPrecio() != null ? productoOriginal.getPrecio().toString() : "",
                     "http://192.168.1.35:5000/" + productoOriginal.getFoto(),
-                    productoOriginal.getIdTipo()
+                    descTipo
+
             );
             //Log.d("URL FOTO " , "http://192.168.1.35:5000/" + productoOriginal.getFoto());
             arguments.clear();
@@ -97,16 +104,16 @@ public class CrearProductoViewModel extends AndroidViewModel {
             // MODO CREAR
             this.productoOriginal = null;
             // Creamos un ViewState con valores por defecto (vacíos)
-            ProductoViewState estadoDeCreacion = new ProductoViewState("", "", "","", 0);
+            ProductoViewState estadoDeCreacion = new ProductoViewState("", "", "","", "Comida");
             estado.setValue(estadoDeCreacion);
         }
     }
     public void guardarProducto(String nombreProducto, String descripcionProducto,
                                 boolean estadoProducto, Uri uriImagen, Double precioProducto,
-                                String tipoProducto) {
+                                String tipoProductoDesc) {
         //buscar en la tabla tipo de la bd la descripcion que coincida con el string tipo
         //asignarle el id del registro encontrado al idTipoProducto
-        int idTipoProducto = 0;
+
         if (productoOriginal != null) {
             SharedPreferences sp = ApiClient.conectar(context);
             String token = sp.getString("token", "no token");
@@ -120,6 +127,8 @@ public class CrearProductoViewModel extends AndroidViewModel {
             // reemplazamos el . por la ,
             String precioConPunto = String.valueOf(precioProducto); // Ejemplo: "10.0"
             String precioConComa = precioConPunto.replace('.', ','); // Resultado: "10,0"
+
+
 
 
             if(uriImagen != null){
@@ -137,13 +146,13 @@ public class CrearProductoViewModel extends AndroidViewModel {
             RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
             RequestBody foto = RequestBody.create(MediaType.parse("application/json"), rutaArchivo);
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
-            RequestBody tipo = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idTipoProducto));
+            RequestBody tipoProducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
 
 
 
 
             Call<Producto> productoCall = ApiClient.getEndPoints().editarProducto(token,  imagenFile,
-                    nombre, descripcion, precio, foto, estado,tipo, id);
+                    nombre, descripcion, precio, foto, estado,tipoProducto, id);
             productoCall.enqueue(new Callback<Producto>() {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {
@@ -170,12 +179,12 @@ public class CrearProductoViewModel extends AndroidViewModel {
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
             RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
             MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
-            RequestBody tipo = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idTipoProducto));
+            RequestBody tipoProducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
 
 
 
             Call<Producto> productoCall = ApiClient.getEndPoints().altaProducto(token,  imagenFile,
-                    nombre, descripcion, precio, tipo, estado);
+                    nombre, descripcion, precio, tipoProducto, estado);
             productoCall.enqueue(new Callback<Producto>() {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {

@@ -55,6 +55,11 @@ public class CrearProductoFragment extends Fragment {
             public void onChanged(Uri uri) {
                 binding.ivFotoProducto.setImageURI(uri);
                 uriImagen =uri;
+                Glide.with(getContext())
+                        .load(uri)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
+                        .skipMemoryCache(true)
+                        .into(binding.ivFotoProducto);
             }
         });
         mViewModel.getEstado().observe(getViewLifecycleOwner(), new Observer<ProductoViewState>() {

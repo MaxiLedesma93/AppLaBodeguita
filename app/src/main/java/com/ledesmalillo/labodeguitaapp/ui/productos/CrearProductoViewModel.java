@@ -82,10 +82,10 @@ public class CrearProductoViewModel extends AndroidViewModel {
         if (arguments != null && arguments.containsKey("producto_para_editar")) {
             // MODO EDITAR
             this.productoOriginal = (Producto) arguments.getSerializable("producto_para_editar");
-            String descTipo;
+            String descTipo ="";
             if(productoOriginal.getIdTipo() == 1){
                 descTipo = "Comida";
-            }else{
+            }else if(productoOriginal.getIdTipo() == 2){
                 descTipo = "Bebida";
             }
             // Creamos un ViewState a partir del producto existente
@@ -146,13 +146,13 @@ public class CrearProductoViewModel extends AndroidViewModel {
             RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
             RequestBody foto = RequestBody.create(MediaType.parse("application/json"), rutaArchivo);
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
-            RequestBody tipoProducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
+            RequestBody tipoproducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
 
 
 
 
             Call<Producto> productoCall = ApiClient.getEndPoints().editarProducto(token,  imagenFile,
-                    nombre, descripcion, precio, foto, estado,tipoProducto, id);
+                    nombre, descripcion, precio, foto, estado,tipoproducto, id);
             productoCall.enqueue(new Callback<Producto>() {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {
@@ -179,12 +179,12 @@ public class CrearProductoViewModel extends AndroidViewModel {
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
             RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
             MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
-            RequestBody tipoProducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
+            RequestBody tipoproducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
 
 
 
             Call<Producto> productoCall = ApiClient.getEndPoints().altaProducto(token,  imagenFile,
-                    nombre, descripcion, precio, tipoProducto, estado);
+                    nombre, descripcion, precio, tipoproducto, estado);
             productoCall.enqueue(new Callback<Producto>() {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {

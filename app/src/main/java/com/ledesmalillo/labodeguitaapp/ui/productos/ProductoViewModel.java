@@ -40,18 +40,18 @@ public class ProductoViewModel extends AndroidViewModel {
 
     }
 
-    public void mostrarProductos() {
+    public void mostrarProductos(String tipoProducto) {
 
         SharedPreferences sp = ApiClient.conectar(context);
         String t = sp.getString("token", "vacio");
-        Call<List<Producto>> lista = ApiClient.getEndPoints().listaProductos(t);
+        Call<List<Producto>> lista = ApiClient.getEndPoints().listaProductos(t, tipoProducto);
         lista.enqueue(new Callback<List<Producto>>() {
             @Override
             public void onResponse(Call<List<Producto>> call, Response<List<Producto>> response) {
                 if(response.isSuccessful()){
                     productos.postValue(response.body());
                 }else{
-                    Toast.makeText(context, "No se encontraron Inmuebles(On response)", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No se encontraron Productos(On response)", Toast.LENGTH_LONG).show();
                 }
             }
 

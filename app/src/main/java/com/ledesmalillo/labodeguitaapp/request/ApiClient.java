@@ -92,8 +92,9 @@ public class ApiClient {
                                        @Part("rol") RequestBody rol,
                                        @Part("estado") RequestBody estado);
 
-        @GET("producto/listar")
-        Call<List<Producto>> listaProductos(@Header("Authorization") String token);
+        @GET("producto/listar/{tipoProducto}")
+        Call<List<Producto>> listaProductos(@Header("Authorization") String token,
+                                            @Path("tipoProducto") String tipoProducto);
 
         @Multipart
         @POST("producto/guardarproducto")
@@ -107,7 +108,7 @@ public class ApiClient {
 
 
 
-        @GET("producto/${id}")
+        @GET("producto/{id}")
         Call<Producto> getProducto(@Header("Authorization") String token, @Path("id") int id);
         @Multipart
         @PATCH("producto/editarproducto")

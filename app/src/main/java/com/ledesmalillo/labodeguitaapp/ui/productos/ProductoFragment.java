@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -38,10 +39,9 @@ public class ProductoFragment extends Fragment {
         binding = FragmentProductoBinding.inflate(getLayoutInflater());
         rvProductos = binding.rvProductos;
         //aca en vez de mostrarProductos, pediriamos bebidas o comidas.
-        mViewModel.mostrarProductos();
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),
-                1, GridLayoutManager.VERTICAL, false);
-        rvProductos.setLayoutManager(gridLayoutManager);
+        mViewModel.mostrarProductos("Comida");
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvProductos.setLayoutManager(linearLayoutManager);
         adapter = new ProductoAdapter(new ArrayList<>(), binding.getRoot(), getLayoutInflater());
         rvProductos.setAdapter(adapter);
         mViewModel.getProductos().observe(getViewLifecycleOwner(), new Observer<List<Producto>>() {
@@ -56,6 +56,8 @@ public class ProductoFragment extends Fragment {
             public void onClick(View view) {
                 binding.btnComida.setSelected(true);
                 binding.btnBebida.setSelected(false);
+                mViewModel.mostrarProductos("Comida");
+
 
             }
         });
@@ -64,6 +66,7 @@ public class ProductoFragment extends Fragment {
             public void onClick(View view) {
                 binding.btnComida.setSelected(false);
                 binding.btnBebida.setSelected(true);
+                mViewModel.mostrarProductos("Bebida");
             }
         });
         binding.fabAgregarProducto.setOnClickListener(new View.OnClickListener() {

@@ -3,6 +3,7 @@ package com.ledesmalillo.labodeguitaapp.ui.productos;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,6 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
+
+import java.util.Locale;
 
 public class ProductoDetalleViewModel extends AndroidViewModel {
     private MutableLiveData<Producto> mProducto;
@@ -31,6 +34,11 @@ public class ProductoDetalleViewModel extends AndroidViewModel {
             producto = (Producto) bundle.getSerializable("producto");
             mProducto.setValue(producto);
         }
+    }
+    public double calcularPrecioTotal(double precioUnitario, int cantidad) {
+
+        return precioUnitario * cantidad;
+
     }
 
 

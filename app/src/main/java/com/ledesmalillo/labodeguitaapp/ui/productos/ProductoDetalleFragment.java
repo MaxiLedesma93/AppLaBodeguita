@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,10 +22,14 @@ import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentProductoDetalleBinding;
 
+import java.util.Locale;
+
 public class ProductoDetalleFragment extends Fragment {
 
     private ProductoDetalleViewModel mViewModel;
     private FragmentProductoDetalleBinding binding;
+    private int cantidad = 1;
+    private Double precioUnitario = 0.0;
 
     public static ProductoDetalleFragment newInstance() {
         return new ProductoDetalleFragment();
@@ -49,6 +54,12 @@ public class ProductoDetalleFragment extends Fragment {
                         .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
                         .skipMemoryCache(true)
                         .into(binding.ivDetProductoFoto);
+
+                precioUnitario = producto.getPrecio();
+                // Actualizamos la UI
+                binding.bottomBar.tvPrecioTotal.setText(String.format(Locale.getDefault(),
+                        "$ %.2f", mViewModel.calcularPrecioTotal(precioUnitario, cantidad)));
+
             }
         });
         binding.btnEditarProducto.setOnClickListener(new View.OnClickListener() {
@@ -59,10 +70,39 @@ public class ProductoDetalleFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_productoDetalleFragment_to_crearProductoFragment, bundle);
             }
         });
+        binding.bottomBar.btnMas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cantidad++;
+                binding.bottomBar.tvCantidad.setText(String.valueOf(cantidad));
+                binding.bottomBar.tvPrecioTotal.setText(String.format(Locale.getDefault(),
+                        "$ %.2f", mViewModel.calcularPrecioTotal(precioUnitario, cantidad)));
+
+            }
+        });
+        // Botón para restar debe estar deshabilitado cuando la cantidad sea 1. se habilita
+        //cuando cantidad sea 2 o +.
+        // el boton + y - no se ven, hay que revisar el color.
+        // ver como enviar los datos al carrito, o armar la lista aca en el detalle fragment para
+        //enviarla al carrito.
+        binding.bottomBar.btnMenos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cantidad--;
+                binding.bottomBar.tvCantidad.setText(String.valueOf(cantidad));
+                binding.bottomBar.tvPrecioTotal.setText(String.format(Locale.getDefault(),
+                        "$ %.2f", mViewModel.calcularPrecioTotal(precioUnitario, cantidad)));
+
+            }
+        });
+
+
         mViewModel.setProducto(getArguments());
 
         return binding.getRoot();
     }
+
+
 
 
 

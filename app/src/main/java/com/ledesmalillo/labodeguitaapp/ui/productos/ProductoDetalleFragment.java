@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,12 +22,14 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentProductoDetalleBinding;
+import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
 
 import java.util.Locale;
 
 public class ProductoDetalleFragment extends Fragment {
 
     private ProductoDetalleViewModel mViewModel;
+    private CarritoViewModel carritoViewModel;
     private FragmentProductoDetalleBinding binding;
     private int cantidad = 1;
     private Double precioUnitario = 0.0;
@@ -39,6 +42,7 @@ public class ProductoDetalleFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(ProductoDetalleViewModel.class);
+        carritoViewModel = new ViewModelProvider(requireActivity()).get(CarritoViewModel.class);
         binding = FragmentProductoDetalleBinding.inflate(getLayoutInflater());
         //View root = inflater.inflate(R.layout.fragment_producto_detalle, container, false);
 
@@ -62,6 +66,22 @@ public class ProductoDetalleFragment extends Fragment {
 
             }
         });
+
+        binding.bottomBar.btnAgregarAlCarrito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Producto p = mViewModel.getProducto().getValue();
+
+                // Agregarmos el item a la lista del carrito en el carritoViewModel
+                carritoViewModel.agregarAlCarrito(p, cantidad);
+
+                Toast.makeText(getContext(), "Producto agregado al carrito", Toast.LENGTH_SHORT).show();
+
+                //Para navegar hacia atras
+                Navigation.findNavController(v).popBackStack();
+
+            }
+        });
         binding.btnEditarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,12 +97,11 @@ public class ProductoDetalleFragment extends Fragment {
                 binding.bottomBar.tvCantidad.setText(String.valueOf(cantidad));
                 binding.bottomBar.tvPrecioTotal.setText(String.format(Locale.getDefault(),
                         "$ %.2f", mViewModel.calcularPrecioTotal(precioUnitario, cantidad)));
+                binding.bottomBar.btnMenos.setEnabled(cantidad > 1);
 
             }
         });
-        // Botón para restar debe estar deshabilitado cuando la cantidad sea 1. se habilita
-        //cuando cantidad sea 2 o +.
-        // el boton + y - no se ven, hay que revisar el color.
+
         // ver como enviar los datos al carrito, o armar la lista aca en el detalle fragment para
         //enviarla al carrito.
         binding.bottomBar.btnMenos.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +111,9 @@ public class ProductoDetalleFragment extends Fragment {
                 binding.bottomBar.tvCantidad.setText(String.valueOf(cantidad));
                 binding.bottomBar.tvPrecioTotal.setText(String.format(Locale.getDefault(),
                         "$ %.2f", mViewModel.calcularPrecioTotal(precioUnitario, cantidad)));
+
+                binding.bottomBar.btnMenos.setEnabled(cantidad > 1);
+
 
             }
         });

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.databinding.ActivityMainBinding;
+import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
 import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewModel;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private CarritoViewModel carritoViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         // Obtienes una instancia del ViewModel cuyo ciclo de vida está atado a la Activity
         UsuarioViewModel usuarioViewModel = new ViewModelProvider(this).get(UsuarioViewModel.class);
+        carritoViewModel = new ViewModelProvider(this).get(CarritoViewModel.class);
 
         // Le ordenas al ViewModel que cargue los datos del usuario.
         // Esto emitirá un estado que el UsuarioFragment (cuando esté visible) recibirá.

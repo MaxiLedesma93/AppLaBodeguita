@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:backgroundTint="#DFDFDF"
+    android:textAlignment="center"
+    app:cardBackgroundColor="#DFDFDF"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    app:contentPadding="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="355dp"
+        android:layout_height="170dp"
+        android:background="#FAFAFA"
+        android:backgroundTint="#DFDFDF">
+
+
+        <TextView
+            android:id="@+id/tvNombreProducto"
+            android:layout_width="197dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/ivFotoProducto"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivFotoProducto"
+            android:layout_width="108dp"
+            android:layout_height="103dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:textAlignment="center"
+            app:flow_horizontalAlign="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvPrecioProducto"
+            android:layout_width="157dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.077"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescripcionProducto" />
+
+        <TextView
+            android:id="@+id/tvDescripcionProducto"
+            android:layout_width="173dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textColor="#000000"
+            app:layout_constraintEnd_toStartOf="@+id/ivFotoProducto"
+            app:layout_constraintHorizontal_bias="0.296"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNombreProducto" />
+
+        <Button
+            android:id="@+id/btn_borrar_carrito"
+            android:layout_width="85dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="16dp"
+            android:background="@android:color/transparent"
+            android:text="Eliminar"
+            android:textColorLink="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.84"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivFotoProducto" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

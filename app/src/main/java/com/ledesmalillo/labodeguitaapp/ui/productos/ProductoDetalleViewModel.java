@@ -32,6 +32,7 @@ public class ProductoDetalleViewModel extends AndroidViewModel {
     public void setProducto(Bundle bundle) {
         if (bundle != null) {
             producto = (Producto) bundle.getSerializable("producto");
+
             mProducto.setValue(producto);
         }
     }

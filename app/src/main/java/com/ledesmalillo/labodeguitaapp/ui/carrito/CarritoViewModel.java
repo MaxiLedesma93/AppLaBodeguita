@@ -47,6 +47,12 @@ public class CarritoViewModel extends ViewModel {
         listaItems.setValue(listaActual);
         calcularTotal();
     }
+    public boolean habilitarBotonRealizarPedido() {
+        if(total.getValue() > 0) {
+            return true;
+        }
+        return false;
+    }
 
     public void calcularTotal() {
         List<ItemCarrito> listaActual = listaItems.getValue();
@@ -57,5 +63,16 @@ public class CarritoViewModel extends ViewModel {
             }
         }
         total.setValue(sumaTotal);
+    }
+    public void cambiarCantidadCarrito(Producto producto, int cantidad) {
+        List<ItemCarrito> listaActual = listaItems.getValue();
+        for (ItemCarrito item : listaActual) {
+            if (item.getProducto().getId() == producto.getId()) {
+                item.setCantidad(cantidad); // Si ya está, suma la cantidad
+                listaItems.setValue(listaActual); // Notifica el cambio
+                calcularTotal();
+                return;
+            }
+        }
     }
 }

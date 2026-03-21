@@ -15,8 +15,8 @@
     app:contentPadding="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="355dp"
-        android:layout_height="170dp"
+        android:layout_width="339dp"
+        android:layout_height="247dp"
         android:background="#FAFAFA"
         android:backgroundTint="#DFDFDF">
 
@@ -73,18 +73,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNombreProducto" />
 
-        <Button
-            android:id="@+id/btn_borrar_carrito"
-            android:layout_width="85dp"
-            android:layout_height="23dp"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/transparent"
-            android:text="Eliminar"
-            android:textColorLink="@color/black"
+        <ImageButton
+            android:id="@+id/imgBtn_eliminar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+
+            android:layout_marginTop="68dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.84"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivFotoProducto" />
+            app:layout_constraintHorizontal_bias="0.66"
+            app:layout_constraintStart_toEndOf="@+id/tvPrecioProducto"
+            app:layout_constraintTop_toBottomOf="@+id/ivFotoProducto"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <include
+            android:id="@+id/bottomBarItemProdCarrito"
+            layout="@layout/view_bottom_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -72,7 +72,7 @@ public class ProductoDetalleFragment extends Fragment {
             public void onClick(View v) {
                 Producto p = mViewModel.getProducto().getValue();
 
-                // Agregarmos el item a la lista del carrito en el carritoViewModel
+                // Agregamos el item a la lista del carrito en el carritoViewModel
                 carritoViewModel.agregarAlCarrito(p, cantidad);
 
                 Toast.makeText(getContext(), "Producto agregado al carrito", Toast.LENGTH_SHORT).show();

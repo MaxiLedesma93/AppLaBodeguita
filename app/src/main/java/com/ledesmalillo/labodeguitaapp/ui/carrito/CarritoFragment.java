@@ -46,12 +46,15 @@ public class CarritoFragment extends Fragment {
                 adapter.actualizarProductos(itemCarritos);
                 carritoViewModel.calcularTotal();
 
+
             }
         });
+        binding.btnRealizarPedido.setEnabled(carritoViewModel.habilitarBotonRealizarPedido());
         carritoViewModel.getTotal().observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double total) {
                 binding.tvPrecioTotal.setText("$"+total.toString());
+                binding.btnRealizarPedido.setEnabled(carritoViewModel.habilitarBotonRealizarPedido());
             }
 
         });

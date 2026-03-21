@@ -14,10 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentPedidosBinding;
+import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
 
 public class PedidosFragment extends Fragment {
 
     private PedidosViewModel pedidosViewModel;
+    private CarritoViewModel carritoViewModel;
     private FragmentPedidosBinding binding;
 
 

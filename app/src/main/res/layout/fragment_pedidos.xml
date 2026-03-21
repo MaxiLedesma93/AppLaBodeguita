@@ -9,17 +9,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPedidoProductos"
-        android:layout_width="389dp"
-        android:layout_height="532dp"
-        android:layout_marginBottom="152dp"
+        android:layout_width="307dp"
+        android:layout_height="357dp"
         android:backgroundTint="#DFDFDF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,15 @@ public class Pedido implements Serializable {
     private Estado estado;
     private List<Detalle> detalles;
 
-    public Pedido(int id, int clienteId, String fecha, int estadoId, Boolean pagado, Usuario cliente, Estado estado, List<Detalle> detalles) {
+    private String direccionEntrega;
+    private Boolean delivery;
+
+    public Pedido() {
+    }
+
+    public Pedido(int id, int clienteId, String fecha, int estadoId, Boolean pagado, Usuario cliente,
+                  Estado estado, List<Detalle> detalles, String direccionEntrega, Boolean delivery)
+    {
         this.id = id;
         this.clienteId = clienteId;
         this.fecha = fecha;
@@ -23,6 +31,24 @@ public class Pedido implements Serializable {
         this.cliente = cliente;
         this.estado = estado;
         this.detalles = detalles;
+        this.direccionEntrega = direccionEntrega;
+        this.delivery = delivery;
+    }
+
+    public String getDireccionEntrega() {
+        return direccionEntrega;
+    }
+
+    public void setDireccionEntrega(String direccionEntrega) {
+        this.direccionEntrega = direccionEntrega;
+    }
+
+    public boolean getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(boolean delivery) {
+        this.delivery = delivery;
     }
 
     public int getId() {

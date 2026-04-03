@@ -49,6 +49,8 @@ public class LoginActivityViewModel extends AndroidViewModel {
                         public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                             bundle.putSerializable("usuario", response.body());
                             iniciarMenu(bundle);
+                            editor.putString("direccion",response.body().getDireccion());
+                            editor.apply();
                         }
 
                         @Override

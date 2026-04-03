@@ -122,5 +122,14 @@ public class ApiClient {
                                       @Part("tipoproducto") RequestBody tipoProducto,
                                       @Part("id") RequestBody id);
 
+        @POST("pedido/guardarpedido")
+        Call<Producto> altaPedido(@Header("Authorization") String token,
+                                    @Part("clienteId") RequestBody clienteId,
+                                    @Part("fecha") RequestBody fecha,
+                                    @Part("pagado") RequestBody pagado,
+                                    @Part("estadoId") RequestBody estadoId,
+                                    @Part("delivery") RequestBody delivery,
+                                    @Part("direccionEntrega") RequestBody direccionEntrega);
+
     }
 }

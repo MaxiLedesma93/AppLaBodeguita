@@ -15,9 +15,9 @@
     app:contentPadding="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="339dp"
-        android:layout_height="247dp"
-        android:background="#631BE4"
+        android:layout_width="363dp"
+        android:layout_height="211dp"
+        android:background="#FAFAFA"
         android:backgroundTint="#DFDFDF">
 
 
@@ -36,11 +36,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/ivFotoProducto"
-            android:layout_width="108dp"
-            android:layout_height="103dp"
+            android:id="@+id/ivFotoPedido"
+            android:layout_width="115dp"
+            android:layout_height="107dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="4dp"
             android:textAlignment="center"
             app:flow_horizontalAlign="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,28 +63,15 @@
 
         <TextView
             android:id="@+id/tvDescripcionProducto"
-            android:layout_width="173dp"
-            android:layout_height="49dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="205dp"
+            android:layout_height="77dp"
+            android:layout_marginTop="12dp"
             android:text="TextView"
             android:textColor="#000000"
             app:layout_constraintEnd_toStartOf="@+id/ivFotoProducto"
-            app:layout_constraintHorizontal_bias="0.296"
+            app:layout_constraintHorizontal_bias="0.41"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNombreProducto" />
-
-
-        <include
-            android:id="@+id/bottomBarItemProdCarrito"
-            layout="@layout/view_bottom_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:padding="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

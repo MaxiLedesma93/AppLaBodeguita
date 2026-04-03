@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context=".ui.carrito.CarritoFragment">
 
     <TextView
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Carrito"
         android:textAlignment="center"
@@ -25,11 +26,11 @@
         android:id="@+id/rvProductosPedido"
         android:layout_width="378dp"
         android:layout_height="474dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo_carrito" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
         android:id="@+id/btnRealizarPedido"
@@ -41,18 +42,78 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPrecioTotal"
-        app:layout_constraintVertical_bias="0.223" />
+        app:layout_constraintVertical_bias="0.155" />
 
     <TextView
         android:id="@+id/tvPrecioTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="24dp"
         android:text="TextView"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvProductosPedido" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupEntrega"
+        android:layout_width="306dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titulo_carrito">
+
+        <RadioButton
+            android:id="@+id/rbRetiroLocal"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:text="Retirar en local" />
+
+        <RadioButton
+            android:id="@+id/rbDelivery"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal"
+            android:text="Delivery" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Direccion: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupEntrega" />
+
+    <EditText
+        android:id="@+id/etDireccionEntrega"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupEntrega" />
+
+    <ImageButton
+        android:id="@+id/ibEditarDireccion"
+        android:layout_width="40dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="4dp"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.262"
+        app:layout_constraintStart_toEndOf="@+id/etDireccionEntrega"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupEntrega" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

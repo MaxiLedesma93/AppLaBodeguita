@@ -75,6 +75,12 @@ public class ProductoFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.crearProductoFragment);
             }
         });
+        binding.fabIrAlCarrito.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.nav_carrito);
+            }
+        });
         return binding.getRoot();
     }
 

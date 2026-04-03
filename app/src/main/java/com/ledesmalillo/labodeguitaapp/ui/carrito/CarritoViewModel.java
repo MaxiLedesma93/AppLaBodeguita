@@ -1,20 +1,32 @@
 package com.ledesmalillo.labodeguitaapp.ui.carrito;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.ItemCarrito;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
+import com.ledesmalillo.labodeguitaapp.request.ApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarritoViewModel extends ViewModel {
+public class CarritoViewModel extends AndroidViewModel {
     private final MutableLiveData<List<ItemCarrito>> listaItems = new MutableLiveData<>();
     private final MutableLiveData<Double> total = new MutableLiveData<>();
+    private Context context;
+    private static final String DIRECCIONLOCAL = "B. Pinar del Norte, mz C, casa 2277";
 
-    public CarritoViewModel() {
+
+    public CarritoViewModel(@NonNull Application application) {
+        super(application);
+        context = application.getApplicationContext();
         listaItems.setValue(new ArrayList<>());
         total.setValue(0.0);
     }
@@ -74,5 +86,16 @@ public class CarritoViewModel extends ViewModel {
                 return;
             }
         }
+    }
+    public String asignarDireccion(int idDelivery, int idRetiro, int idRbSeleccionado){
+        SharedPreferences sp = ApiClient.conectar(context);
+        //si el id Delivery viene en 0, entonces asignamos
+        if (idRbSeleccionado == idDelivery) {
+            return sp.getString("direccion", "Sin direccion");
+        }
+        if(idRbSeleccionado == idRetiro){
+            return DIRECCIONLOCAL;
+        }
+        return "Delivery";
     }
 }

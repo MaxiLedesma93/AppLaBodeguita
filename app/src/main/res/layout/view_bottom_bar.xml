@@ -2,38 +2,46 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_bar"
     android:elevation="8dp"
-    android:padding="16dp"
+    android:padding="0dp"
     android:textAlignment="viewStart"> <!-- La elevación es clave para la sombra -->
 
     <!-- Stepper de Cantidad (reutilizando el diseño anterior) -->
+
+    <!-- Botón de Agregar -->
+
+    <!-- Texto de "Total" que se superpone al botón -->
+
     <LinearLayout
         android:id="@+id/layoutStepper"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="112dp"
+        android:layout_height="50dp"
         android:background="@drawable/bg_stepper"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/btnMenos"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:padding="0dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
+            android:padding="0dp"
             android:text="-"
             android:textColor="@color/black"
-            app:backgroundTint="@null"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:backgroundTint="@null" />
 
         <TextView
             android:id="@+id/tvCantidad"
@@ -50,23 +58,20 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:padding="0dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
+            android:padding="0dp"
             android:text="+"
             android:textColor="@color/black"
-            app:backgroundTint="@null"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:backgroundTint="@null" />
     </LinearLayout>
-
-    <!-- Botón de Agregar -->
-
-    <!-- Texto de "Total" que se superpone al botón -->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAgregarAlCarrito"
         android:layout_width="0dp"
         android:layout_height="39dp"
+        android:layout_marginEnd="4dp"
         android:backgroundTint="#631BE4"
         android:text="Agregar"
         android:textAlignment="center"
@@ -77,7 +82,8 @@
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.47" />
 
     <TextView
         android:id="@+id/tvPrecioTotal"
@@ -91,5 +97,19 @@
         app:layout_constraintEnd_toStartOf="@+id/btnAgregarAlCarrito"
         app:layout_constraintStart_toEndOf="@+id/layoutStepper"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imgBtn_eliminar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#631BE4"
+        android:baselineAlignBottom="false"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@id/layoutStepper"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

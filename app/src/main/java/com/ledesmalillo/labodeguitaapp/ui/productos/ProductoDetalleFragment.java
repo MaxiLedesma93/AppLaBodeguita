@@ -117,6 +117,8 @@ public class ProductoDetalleFragment extends Fragment {
 
             }
         });
+        binding.bottomBar.imgBtnEliminar.setVisibility(View.GONE);
+
 
 
         mViewModel.setProducto(getArguments());

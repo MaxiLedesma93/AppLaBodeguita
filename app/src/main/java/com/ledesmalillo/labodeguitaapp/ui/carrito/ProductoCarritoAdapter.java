@@ -31,10 +31,12 @@ public class ProductoCarritoAdapter extends RecyclerView.Adapter <ProductoCarrit
     private CarritoViewModel carritoViewModel;
 
     private LayoutInflater layoutInflater;
-    public ProductoCarritoAdapter(List<ItemCarrito> lista, View root, LayoutInflater layoutInflater) {
+    public ProductoCarritoAdapter(List<ItemCarrito> lista, View root, LayoutInflater layoutInflater,
+                                  CarritoViewModel carritoViewModel) {
         this.lista = lista;
         this.root = root;
         this.layoutInflater = layoutInflater;
+        this.carritoViewModel = carritoViewModel;
     }
 
     @NonNull
@@ -42,7 +44,6 @@ public class ProductoCarritoAdapter extends RecyclerView.Adapter <ProductoCarrit
     public ProductoCarritoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_producto_carrito, parent, false);
         return new ViewHolder(view);
-
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ProductoCarritoAdapter extends RecyclerView.Adapter <ProductoCarrit
         Producto p = lista.get(holder.getAdapterPosition()).getProducto();
         //URL maxi String URL = "http://192.168.1.35:5000/";
         //URL lula String URL = "http://192.168.100.9:5000/";
-        carritoViewModel = new ViewModelProvider((ViewModelStoreOwner) root.getContext()).get(CarritoViewModel.class);
+        //carritoViewModel = new ViewModelProvider((ViewModelStoreOwner) root.getContext()).get(CarritoViewModel.class);
         String URL = "http://192.168.1.35:5000/";
         holder.tvNombreProducto.setText(p.getNombre());
         holder.tvPrecioProducto.setText(p.getPrecio() != null ? "$ " + p.getPrecio().toString() : "-");
@@ -68,8 +69,8 @@ public class ProductoCarritoAdapter extends RecyclerView.Adapter <ProductoCarrit
                 notifyItemRemoved(holder.getAdapterPosition());
                 notifyItemRangeChanged(holder.getAdapterPosition(), lista.size());
                 carritoViewModel.calcularTotal();
-                Navigation.findNavController(view).navigate(R.id.nav_carrito);
-                Navigation.findNavController(view).popBackStack();
+                //Navigation.findNavController(view).navigate(R.id.nav_carrito);
+                //Navigation.findNavController(view).popBackStack();
             }
         });
         holder.btnMenos.setOnClickListener(new View.OnClickListener() {

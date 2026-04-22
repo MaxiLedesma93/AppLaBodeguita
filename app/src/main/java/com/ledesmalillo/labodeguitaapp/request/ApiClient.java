@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ledesmalillo.labodeguitaapp.Modelos.Detalle;
+import com.ledesmalillo.labodeguitaapp.Modelos.Pedido;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 
@@ -122,14 +124,34 @@ public class ApiClient {
                                       @Part("tipoproducto") RequestBody tipoProducto,
                                       @Part("id") RequestBody id);
 
+        @Multipart
         @POST("pedido/guardarpedido")
-        Call<Producto> altaPedido(@Header("Authorization") String token,
-                                    @Part("clienteId") RequestBody clienteId,
-                                    @Part("fecha") RequestBody fecha,
-                                    @Part("pagado") RequestBody pagado,
-                                    @Part("estadoId") RequestBody estadoId,
-                                    @Part("delivery") RequestBody delivery,
-                                    @Part("direccionEntrega") RequestBody direccionEntrega);
+        Call<Pedido> altaPedido(@Header("Authorization") String token,
+                                @Part("clienteId") RequestBody clienteId,
+                                @Part("fecha") RequestBody fecha,
+                                @Part("pagado") RequestBody pagado,
+                                @Part("estadoId") RequestBody estadoId,
+                                @Part("delivery") RequestBody delivery,
+                                @Part("direccionEntrega") RequestBody direccionEntrega);
+
+        @GET("pedido/listarPedidosdeUsuario")
+        Call<List<Pedido>> listarPedidosPorUsuario(@Header("Authorization") String token);
+
+
+
+
+
+        @Multipart
+        @POST("detalle/guardardetalle")
+        Call<Detalle> altaDetalle(@Header("Authorization") String token,
+                                  @Part("pedidoId") RequestBody pedidoId,
+                                  @Part("productoId") RequestBody productoId,
+                                  @Part("cantidad") RequestBody cantidad);
+        @GET("detalle/obtenerdetalleporpedido/{pedidoId}")
+        Call<List<Detalle>> obtenerDetallePorPedido(@Header("Authorization") String token,
+                                                   @Path("pedidoId") int pedidoId);
+
+
 
     }
 }

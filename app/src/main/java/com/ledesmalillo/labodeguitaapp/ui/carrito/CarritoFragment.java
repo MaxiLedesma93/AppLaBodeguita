@@ -42,11 +42,11 @@ public class CarritoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         carritoViewModel =
-                new ViewModelProvider(this).get(CarritoViewModel.class);
+                new ViewModelProvider(requireActivity()).get(CarritoViewModel.class);
         binding = FragmentCarritoBinding.inflate(inflater, container, false);
         rvProductosCarrito = binding.rvProductosPedido;
         rvProductosCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ProductoCarritoAdapter(new ArrayList<>(), binding.getRoot(), getLayoutInflater());
+        adapter = new ProductoCarritoAdapter(new ArrayList<>(), binding.getRoot(), getLayoutInflater(), carritoViewModel);
         rvProductosCarrito.setAdapter(adapter);
 
         carritoViewModel.getListaItems().observe(getViewLifecycleOwner(), new Observer<List<ItemCarrito>>() {
@@ -54,6 +54,13 @@ public class CarritoFragment extends Fragment {
             public void onChanged(List<ItemCarrito> itemCarritos) {
                 adapter.actualizarProductos(itemCarritos);
                 carritoViewModel.calcularTotal();
+            }
+        });
+        carritoViewModel.getTotal().observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double total) {
+                binding.tvPrecioTotal.setText("$"+total.toString());
+                binding.btnRealizarPedido.setEnabled(carritoViewModel.habilitarBotonRealizarPedido());
             }
         });
         binding.radioGroupEntrega.check(binding.rbDelivery.getId());
@@ -72,17 +79,20 @@ public class CarritoFragment extends Fragment {
         });
 
         binding.btnRealizarPedido.setEnabled(carritoViewModel.habilitarBotonRealizarPedido());
-        carritoViewModel.getTotal().observe(getViewLifecycleOwner(), new Observer<Double>() {
-            @Override
-            public void onChanged(Double total) {
-                binding.tvPrecioTotal.setText("$"+total.toString());
-                binding.btnRealizarPedido.setEnabled(carritoViewModel.habilitarBotonRealizarPedido());
-            }
-        });
+
         binding.ibEditarDireccion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 binding.etDireccionEntrega.setEnabled(true);
+            }
+        });
+        binding.btnRealizarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String direccion = binding.etDireccionEntrega.getText().toString();
+                boolean deliveryChecked = binding.rbDelivery.isChecked();
+
+                carritoViewModel.guardarPedido(direccion, deliveryChecked);
             }
         });
 

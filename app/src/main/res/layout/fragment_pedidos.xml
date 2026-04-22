@@ -8,11 +8,26 @@
     tools:context=".ui.pedidos.PedidosFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPedidoProductos"
-        android:layout_width="307dp"
-        android:layout_height="357dp"
+        android:id="@+id/rvPedido"
+        android:layout_width="344dp"
+        android:layout_height="494dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="#DFDFDF"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.87" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="181dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="40dp"
+        android:text="Lista de Pedidos"
+        android:textAlignment="center"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

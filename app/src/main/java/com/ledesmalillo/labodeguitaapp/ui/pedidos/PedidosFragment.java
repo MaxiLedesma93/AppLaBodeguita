@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Pedido;
-import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentPedidosBinding;
 import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
 
@@ -25,7 +22,7 @@ import java.util.List;
 public class PedidosFragment extends Fragment {
 
     private PedidosViewModel pedidosViewModel;
-    private CarritoViewModel carritoViewModel;
+    //private CarritoViewModel carritoViewModel;
     private FragmentPedidosBinding binding;
     private RecyclerView rvPedidos;
     private PedidoAdapter pedidoAdapter;
@@ -46,11 +43,8 @@ public class PedidosFragment extends Fragment {
             public void onChanged(List<Pedido> pedidos) {
                 pedidoAdapter.actualizarPedidos(pedidos);
             }
-
         });
         pedidosViewModel.mostrarPedidos();
-
-
         return binding.getRoot();
     }
 }

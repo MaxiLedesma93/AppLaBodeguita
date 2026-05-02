@@ -4,60 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:backgroundTint="#DFDFDF"
-    android:textAlignment="center"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     app:cardBackgroundColor="#DFDFDF"
     app:cardCornerRadius="20dp"
-    app:cardElevation="10dp"
-    app:contentPadding="20dp">
+    app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FAFAFA"
-        android:textAlignment="center"
-        android:backgroundTint="#DFDFDF">
+        android:padding="16dp"
+        android:background="#FAFAFA">
 
-
-        <TextView
-            android:id="@+id/tvProductos"
-            android:layout_width="255dp"
-            android:layout_height="78dp"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            android:textSize="16dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTituloCPedido" />
-
-        <Button
-            android:id="@+id/btnRepetirPedido"
-            android:layout_width="158dp"
-            android:layout_height="54dp"
-            android:layout_marginBottom="16dp"
-            android:text="Repetir Pedido"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvProductos"
-            app:layout_constraintVertical_bias="1.0" />
-
+        <!-- 1. El Título debe ir PRIMERO para que otros puedan anclarse a él -->
         <TextView
             android:id="@+id/tvTituloCPedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text=""
+            android:layout_marginTop="8dp"
+            android:text="Pedido"
             android:textStyle="bold"
             android:textSize="20sp"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.451"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 2. El Scroll ahora se ancla correctamente al título que ya existe -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollProductos"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="16dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTituloCPedido">
+
+            <TextView
+                android:id="@+id/tvProductos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cargando productos..."
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btnRepetirPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Repetir Pedido"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollProductos" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -132,7 +132,16 @@ public class ApiClient {
                                 @Part("pagado") RequestBody pagado,
                                 @Part("estadoId") RequestBody estadoId,
                                 @Part("delivery") RequestBody delivery,
-                                @Part("direccionEntrega") RequestBody direccionEntrega);
+                                @Part("direccionEntrega") RequestBody direccionEntrega,
+                                @Part("importeTotal") RequestBody importeTotal);
+
+        /// Hasta Aqui llegamos
+        @Multipart
+        @POST("pedido/guardarpedido")
+        Call<Pedido> registrarPago(@Header("Authorization") String token,
+                                @Part("pedidoId") RequestBody idPedido,
+                                @Part("metodoDePago") RequestBody metodoDePago,
+                                @Part("pagado") RequestBody pagado);
 
         @GET("pedido/listarPedidosdeUsuario")
         Call<List<Pedido>> listarPedidosPorUsuario(@Header("Authorization") String token);

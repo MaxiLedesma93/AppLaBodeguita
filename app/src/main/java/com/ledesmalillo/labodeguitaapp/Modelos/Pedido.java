@@ -16,13 +16,16 @@ public class Pedido implements Serializable {
 
     private String direccionEntrega;
     private Boolean delivery;
+    private Double importeTotal;
+    private String metodoDePago;
 
     public Pedido() {
     }
 
-    public Pedido(int id, int clienteId, String fecha, int estadoId, Boolean pagado, Usuario cliente,
-                  Estado estado, List<Detalle> detalles, String direccionEntrega, Boolean delivery)
-    {
+    public Pedido(int id, int clienteId, String fecha, int estadoId,
+                  Boolean pagado, Usuario cliente, Estado estado,
+                  List<Detalle> detalles, String direccionEntrega,
+                  Boolean delivery, Double importeTotal, String metodoDePago) {
         this.id = id;
         this.clienteId = clienteId;
         this.fecha = fecha;
@@ -33,6 +36,8 @@ public class Pedido implements Serializable {
         this.detalles = detalles;
         this.direccionEntrega = direccionEntrega;
         this.delivery = delivery;
+        this.importeTotal = importeTotal;
+        this.metodoDePago = metodoDePago;
     }
 
     public String getDireccionEntrega() {
@@ -43,12 +48,11 @@ public class Pedido implements Serializable {
         this.direccionEntrega = direccionEntrega;
     }
 
+    public void setDelivery(Boolean delivery) {
+        this.delivery = delivery;
+    }
     public boolean getDelivery() {
         return delivery;
-    }
-
-    public void setDelivery(boolean delivery) {
-        this.delivery = delivery;
     }
 
     public int getId() {
@@ -114,4 +118,21 @@ public class Pedido implements Serializable {
     public void setDetalles(List<Detalle> detalles) {
         this.detalles = detalles;
     }
+
+    public Double getImporteTotal() {
+        return importeTotal;
+    }
+
+    public void setImporteTotal(Double importeTotal) {
+        this.importeTotal = importeTotal;
+    }
+
+    public String getMetodoDePago() {
+        return metodoDePago;
+    }
+
+    public void setMetodoDePago(String metodoDePago) {
+        this.metodoDePago = metodoDePago;
+    }
 }
+

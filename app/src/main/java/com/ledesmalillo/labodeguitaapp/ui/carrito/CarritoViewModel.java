@@ -125,6 +125,10 @@ public class CarritoViewModel extends AndroidViewModel {
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();
         String idCliente = sp.getString("idCliente", "Sin id");
         String delEstado = deliveryEstado ? "true" : "false";
+        // para evitar que al precio se le agregue un 0 que es el que esta luego del .
+        // reemplazamos el . por la ,
+        String importeConPunto = String.valueOf(total.getValue()); // Ejemplo: "10.0"
+        String importeConComa = importeConPunto.replace('.', ','); // Resultado: "10,0"
 
         Date fechaActual = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
@@ -142,8 +146,9 @@ public class CarritoViewModel extends AndroidViewModel {
                 delEstado);
         RequestBody direccionEntrega = RequestBody.create(MediaType.parse("application/json"),
                 direccionPedido);
+        RequestBody importeTotal = RequestBody.create(MediaType.parse("application/json"), importeConComa);
         Call<Pedido> pedidoCall = api.altaPedido(token, clienteId, fecha, pagado, estadoId,
-                delivery, direccionEntrega);
+                delivery, direccionEntrega, importeTotal);
         pedidoCall.enqueue(new Callback<Pedido>() {
             @Override
             public void onResponse(Call<Pedido> call, Response<Pedido> response) {

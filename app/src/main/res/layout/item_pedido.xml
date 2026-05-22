@@ -14,9 +14,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="#FAFAFA">
+        android:layout_height="224dp"
+        android:background="#FAFAFA"
+        android:padding="16dp">
 
         <!-- 1. El Título debe ir PRIMERO para que otros puedan anclarse a él -->
         <TextView
@@ -25,48 +25,81 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Pedido"
-            android:textStyle="bold"
-            android:textSize="20sp"
             android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- 2. El Scroll ahora se ancla correctamente al título que ya existe -->
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollProductos"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="16dp"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTituloCPedido">
-
-            <TextView
-                android:id="@+id/tvProductos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cargando productos..."
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
-
-        </androidx.core.widget.NestedScrollView>
 
         <Button
-            android:id="@+id/btnRepetirPedido"
+            android:id="@+id/btnVerDetallePedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Repetir Pedido"
+            android:text="Ver Detalle"
             android:textAllCaps="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollProductos" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTituloCPedido"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tvEstadoPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="En Preparacion"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTituloCPedido" />
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="25/05/2026"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.449"
+            app:layout_constraintStart_toEndOf="@+id/tvEstadoPedido"
+            app:layout_constraintTop_toBottomOf="@+id/tvTituloCPedido" />
+
+        <TextView
+            android:id="@+id/tvCantProductosPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="31dp"
+            android:text="Cant: 5 productos"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/btnVerDetallePedido"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEstadoPedido"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tvPrecioPedido"
+            android:layout_width="99dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="28dp"
+            android:text="$89000"
+            android:textSize="18sp"
+            android:textColor="#2E7D32"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/btnVerDetallePedido"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.551"
+            app:layout_constraintStart_toEndOf="@+id/tvCantProductosPedido"
+            app:layout_constraintTop_toBottomOf="@+id/tvFecha"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

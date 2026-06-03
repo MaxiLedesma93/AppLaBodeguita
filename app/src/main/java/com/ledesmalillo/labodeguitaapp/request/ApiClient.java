@@ -21,6 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -133,11 +134,24 @@ public class ApiClient {
                                 @Part("estadoId") RequestBody estadoId,
                                 @Part("delivery") RequestBody delivery,
                                 @Part("direccionEntrega") RequestBody direccionEntrega,
-                                @Part("importeTotal") RequestBody importeTotal);
+                                @Part("importeTotal") RequestBody importeTotal,
+                                @Part("metodoDePago") RequestBody metodoDePago);
+        @Multipart
+        @PATCH("pedido/editarpedido")
+        Call<Pedido> editarPedido(@Header("Authorization") String token,
+                                @Part("id") RequestBody id,
+                                @Part("clienteId") RequestBody clienteId,
+                                @Part("fecha") RequestBody fecha,
+                                @Part("pagado") RequestBody pagado,
+                                @Part("estadoId") RequestBody estadoId,
+                                @Part("delivery") RequestBody delivery,
+                                @Part("direccionEntrega") RequestBody direccionEntrega,
+                                @Part("importeTotal") RequestBody importeTotal,
+                                @Part("metodoDePago") RequestBody metodoDePago);
 
         /// Hasta Aqui llegamos
         @Multipart
-        @POST("pedido/guardarpedido")
+        @PATCH("pedido/registrarpago")
         Call<Pedido> registrarPago(@Header("Authorization") String token,
                                 @Part("pedidoId") RequestBody idPedido,
                                 @Part("metodoDePago") RequestBody metodoDePago,
@@ -159,6 +173,15 @@ public class ApiClient {
         @GET("detalle/obtenerdetalleporpedido/{pedidoId}")
         Call<List<Detalle>> obtenerDetallePorPedido(@Header("Authorization") String token,
                                                    @Path("pedidoId") int pedidoId);
+        @Multipart
+        @PATCH("detalle/editardetalle")
+        Call<Detalle> editarDetalle(@Header("Authorization") String token,
+                                    @Part("pedidoId") RequestBody pedidoId,
+                                    @Part("productoId") RequestBody productoId,
+                                    @Part("cantidad") RequestBody cantidad);
+        @DELETE("detalle/borrardetalle/{id}")
+        Call<Detalle> borrarDetalle(@Header("Authorization") String token,
+                                    @Path("id") int id);
 
 
 

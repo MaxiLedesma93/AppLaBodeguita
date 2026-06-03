@@ -62,7 +62,6 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.ViewHolder
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        holder.tvTituloCPedido.setText("Pedido: " + posicion);
         holder.tvCantProductosPedido.setText(obtenerCantProductos(p.getDetalles()));
         holder.tvPrecioPedido.setText("$"+ String.valueOf(p.getImporteTotal()));
         holder.tvEstadoPedido.setText(p.getEstado().getDescripcion());

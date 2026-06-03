@@ -58,7 +58,14 @@ public class PedidoDetalleFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mViewModel.enviarItemsCarrito(mViewModel.getPedido().getValue().getDetalles(),
-                        view, carritoViewModel);
+                        view, carritoViewModel, false);
+            }
+        });
+        binding.btnEditarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewModel.enviarItemsCarrito(mViewModel.getPedido().getValue().getDetalles(),
+                        view, carritoViewModel, true);
             }
         });
         mViewModel.setPedido(getArguments());

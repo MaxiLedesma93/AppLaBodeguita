@@ -53,11 +53,15 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
 
         return productos;
     }
-    public void enviarItemsCarrito(List<Detalle> detalles, View root, CarritoViewModel carritoViewModel){
+    public void enviarItemsCarrito(List<Detalle> detalles, View root,
+                                   CarritoViewModel carritoViewModel, boolean editar){
         carritoViewModel.reiniciarMutableCarrito();
         for (Detalle detalle : detalles) {
             carritoViewModel.agregarAlCarrito(detalle.getProducto(), detalle.getCantidad());
         }
-        Navigation.findNavController(root).navigate(R.id.nav_carrito);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("editar_pedido", editar);
+        bundle.putInt("id_pedido", pedido.getId());
+        Navigation.findNavController(root).navigate(R.id.nav_carrito, bundle);
     }
 }

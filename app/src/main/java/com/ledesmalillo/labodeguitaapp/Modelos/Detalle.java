@@ -17,6 +17,9 @@ public class Detalle implements Serializable {
         this.producto = producto;
     }
 
+    public Detalle() {
+    }
+
     public int getId() {
         return id;
     }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.ledesmalillo.labodeguitaapp.Modelos.ItemCarrito;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentCarritoBinding;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
+import com.ledesmalillo.labodeguitaapp.ui.pedidos.PagoBottomSheet;
 import com.ledesmalillo.labodeguitaapp.ui.productos.CrearProductoFragment;
 
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class CarritoFragment extends Fragment {
         rvProductosCarrito.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ProductoCarritoAdapter(new ArrayList<>(), binding.getRoot(), getLayoutInflater(), carritoViewModel);
         rvProductosCarrito.setAdapter(adapter);
+
 
         carritoViewModel.getListaItems().observe(getViewLifecycleOwner(), new Observer<List<ItemCarrito>>() {
             @Override
@@ -89,10 +92,32 @@ public class CarritoFragment extends Fragment {
         binding.btnRealizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+               // carritoViewModel.guardarPedido(direccion, deliveryChecked);
+            }
+        });
+        binding.btnRealizarPedido.setOnClickListener(v -> {
+            if (carritoViewModel.habilitarBotonRealizarPedido()) {
+
+                // Obtenemos los datos necesarios (puedes sacarlos de tus RadioButtons de entrega)
                 String direccion = binding.etDireccionEntrega.getText().toString();
                 boolean deliveryChecked = binding.rbDelivery.isChecked();
+                boolean esEdicion = false;
+                int id_pedido_editar = 0;
+                Bundle args = getArguments();
+                if(args!=null){
+                     esEdicion = args.getBoolean("editar_pedido", false);
+                     id_pedido_editar = args.getInt("id_pedido", 0);
+                }
 
-                carritoViewModel.guardarPedido(direccion, deliveryChecked);
+
+                // Abrimos el modal
+                PagoBottomSheet modal = new PagoBottomSheet(direccion, deliveryChecked, esEdicion, id_pedido_editar);
+                modal.show(getChildFragmentManager(), "TAG_PAGO");
+
+            } else {
+                Toast.makeText(getContext(), "El carrito está vacío", Toast.LENGTH_SHORT).show();
             }
         });
 

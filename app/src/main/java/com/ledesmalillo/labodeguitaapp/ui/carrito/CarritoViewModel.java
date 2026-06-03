@@ -34,6 +34,7 @@ import retrofit2.Response;
 public class CarritoViewModel extends AndroidViewModel {
     private  MutableLiveData<List<ItemCarrito>> listaItems = new MutableLiveData<>();
     private final MutableLiveData<Double> total = new MutableLiveData<>();
+    private MutableLiveData<List<Detalle>> listaExistenteDetalles = new MutableLiveData<>();
     private Context context;
     private int contDetalles = 0;
     private static final String DIRECCIONLOCAL = "B. Pinar del Norte, mz C, casa 2277";
@@ -117,9 +118,7 @@ public class CarritoViewModel extends AndroidViewModel {
         }
         return "Delivery";
     }
-    //llamada a la api para crear pedido.
-    //================================FALTA MANEJAR EL PAGO.===============================
-    public void guardarPedido(String direccionPedido, boolean deliveryEstado ) {
+    public void guardarPedido(String direccionPedido, boolean deliveryEstado, boolean pagadoEstado) {
         SharedPreferences sp = ApiClient.conectar(context);
         String token = sp.getString("token", "no token");
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();
@@ -134,12 +133,19 @@ public class CarritoViewModel extends AndroidViewModel {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         String fechaFormateada = sdf.format(fechaActual);
 
+        String metDePago = null;
+        if(pagadoEstado){
+            metDePago = "Mercado Pago";
+        }else{
+            metDePago = "Efectivo";
+        }
+
         RequestBody clienteId = RequestBody.create(MediaType.parse("application/json"),
                 idCliente);
         RequestBody fecha = RequestBody.create(MediaType.parse("application/json"),
                 fechaFormateada);
         RequestBody pagado = RequestBody.create(MediaType.parse("application/json"),
-                "false");
+                pagadoEstado ? "true" : "false");
         RequestBody estadoId = RequestBody.create(MediaType.parse("application/json"),
                 "1");
         RequestBody delivery = RequestBody.create(MediaType.parse("application/json"),
@@ -147,8 +153,10 @@ public class CarritoViewModel extends AndroidViewModel {
         RequestBody direccionEntrega = RequestBody.create(MediaType.parse("application/json"),
                 direccionPedido);
         RequestBody importeTotal = RequestBody.create(MediaType.parse("application/json"), importeConComa);
+        RequestBody metodoDePago = RequestBody.create(MediaType.parse("application/json"), metDePago);
+
         Call<Pedido> pedidoCall = api.altaPedido(token, clienteId, fecha, pagado, estadoId,
-                delivery, direccionEntrega, importeTotal);
+                delivery, direccionEntrega, importeTotal, metodoDePago);
         pedidoCall.enqueue(new Callback<Pedido>() {
             @Override
             public void onResponse(Call<Pedido> call, Response<Pedido> response) {
@@ -192,6 +200,97 @@ public class CarritoViewModel extends AndroidViewModel {
             });
         }
     }
+    public void editarPedido(int idPedido, String direccionPedido, boolean deliveryEstado, boolean pagadoEstado) {
+        SharedPreferences sp = ApiClient.conectar(context);
+        String token = sp.getString("token", "no token");
+        ApiClient.MisEndPoints api = ApiClient.getEndPoints();
+        String idCliente = sp.getString("idCliente", "Sin id");
+        String delEstado = deliveryEstado ? "true" : "false";
+        // para evitar que al precio se le agregue un 0 que es el que esta luego del .
+        // reemplazamos el . por la ,
+        String importeConPunto = String.valueOf(total.getValue()); // Ejemplo: "10.0"
+        String importeConComa = importeConPunto.replace('.', ','); // Resultado: "10,0"
+        Date fechaActual = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        String fechaFormateada = sdf.format(fechaActual);
+        String metDePago = null;
+        if(pagadoEstado){
+            metDePago = "Mercado Pago";
+        }else{
+            metDePago = "Efectivo";
+        }
 
+        Call<List<Detalle>> Detalles = ApiClient.getEndPoints().obtenerDetallePorPedido(token, idPedido);
+            Detalles.enqueue(new Callback<List<Detalle>>(){
+            @Override
+            public void onResponse(Call<List<Detalle>> call, Response<List<Detalle>> response) {
+                if(response.isSuccessful()){
+
+                    List<Detalle> listaPedido = response.body();
+                    //enviamos la lista de detalles obtenidas del pedido, y la actual lista para
+                    // comparar
+                    eliminarDetalles(listaPedido, api, token);
+                    enviarDetalles(token, idPedido, api);
+                }else{
+                    Toast.makeText(context, "No se encontraron Productos(On response)", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Detalle>> call, Throwable t) {
+                Toast.makeText(context, "Se produjo un error(failure)", Toast.LENGTH_LONG).show();
+            }
+        });
+        RequestBody id = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idPedido));
+
+        RequestBody clienteId = RequestBody.create(MediaType.parse("application/json"),
+                idCliente);
+        RequestBody fecha = RequestBody.create(MediaType.parse("application/json"),
+                fechaFormateada);
+        RequestBody pagado = RequestBody.create(MediaType.parse("application/json"),
+                pagadoEstado ? "true" : "false");
+        RequestBody estadoId = RequestBody.create(MediaType.parse("application/json"),
+                "1");
+        RequestBody delivery = RequestBody.create(MediaType.parse("application/json"),
+                delEstado);
+        RequestBody direccionEntrega = RequestBody.create(MediaType.parse("application/json"),
+                direccionPedido);
+        RequestBody importeTotal = RequestBody.create(MediaType.parse("application/json"), importeConComa);
+        RequestBody metodoDePago = RequestBody.create(MediaType.parse("application/json"), metDePago);
+
+        Call<Pedido> pedidoCall = api.editarPedido(token, id, clienteId, fecha, pagado, estadoId,
+                delivery, direccionEntrega, importeTotal, metodoDePago);
+        pedidoCall.enqueue(new Callback<Pedido>() {
+            @Override
+            public void onResponse(Call<Pedido> call, Response<Pedido> response) {
+                Toast.makeText(context, "Pedido Editado con Exito", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<Pedido> call, Throwable t) {
+                Toast.makeText(context, "Falla al crear Pedido", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+    public void eliminarDetalles(List<Detalle> listaPedido,
+                                  ApiClient.MisEndPoints api, String token){
+
+        for (Detalle detallePedido : listaPedido) {
+
+                //eliminamos los detalles antiguos del pedido
+                Call<Detalle> detalleCall = api.borrarDetalle(token, detallePedido.getId());
+                detalleCall.enqueue(new Callback<Detalle>() {
+                    @Override
+                    public void onResponse(Call<Detalle> call, Response<Detalle> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Detalle> call, Throwable t) {
+                        Toast.makeText(context, "Falla al eliminar Detalles", Toast.LENGTH_LONG).show();
+                    }
+                });
+        }
+    }
 
 }

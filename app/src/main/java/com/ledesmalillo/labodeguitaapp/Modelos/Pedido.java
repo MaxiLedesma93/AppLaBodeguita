@@ -9,35 +9,31 @@ public class Pedido implements Serializable {
     private int clienteId;
     private String fecha;
     private int estadoId;
-    private Boolean pagado;
     private Usuario cliente;
     private Estado estado;
     private List<Detalle> detalles;
-
     private String direccionEntrega;
     private Boolean delivery;
     private Double importeTotal;
-    private String metodoDePago;
+
 
     public Pedido() {
     }
 
     public Pedido(int id, int clienteId, String fecha, int estadoId,
-                  Boolean pagado, Usuario cliente, Estado estado,
+                   Usuario cliente, Estado estado,
                   List<Detalle> detalles, String direccionEntrega,
-                  Boolean delivery, Double importeTotal, String metodoDePago) {
+                  Boolean delivery, Double importeTotal) {
         this.id = id;
         this.clienteId = clienteId;
         this.fecha = fecha;
         this.estadoId = estadoId;
-        this.pagado = pagado;
         this.cliente = cliente;
         this.estado = estado;
         this.detalles = detalles;
         this.direccionEntrega = direccionEntrega;
         this.delivery = delivery;
         this.importeTotal = importeTotal;
-        this.metodoDePago = metodoDePago;
     }
 
     public String getDireccionEntrega() {
@@ -87,14 +83,6 @@ public class Pedido implements Serializable {
         this.estadoId = estadoId;
     }
 
-    public Boolean getPagado() {
-        return pagado;
-    }
-
-    public void setPagado(Boolean pagado) {
-        this.pagado = pagado;
-    }
-
     public Usuario getCliente() {
         return cliente;
     }
@@ -127,12 +115,6 @@ public class Pedido implements Serializable {
         this.importeTotal = importeTotal;
     }
 
-    public String getMetodoDePago() {
-        return metodoDePago;
-    }
 
-    public void setMetodoDePago(String metodoDePago) {
-        this.metodoDePago = metodoDePago;
-    }
 }
 

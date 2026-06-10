@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ledesmalillo.labodeguitaapp.Modelos.Detalle;
+import com.ledesmalillo.labodeguitaapp.Modelos.Pago;
 import com.ledesmalillo.labodeguitaapp.Modelos.Pedido;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 import java.util.List;
 
@@ -34,10 +36,8 @@ import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public class ApiClient {
-    //ip maxi 192.168.1.35
-    //ip lula 192.168.100.9
-    //private static final String URL = "http://192.168.1.35:5000/";
-    private static final String URL = "http://192.168.1.35:5000/";
+
+
 
     private static MisEndPoints mep;
     public static SharedPreferences sp;
@@ -59,7 +59,7 @@ public class ApiClient {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         httpClient.addInterceptor(loggingInterceptor);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
+                .baseUrl(Constantes.URL_BASE)
                 .client(httpClient.build())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -130,32 +130,28 @@ public class ApiClient {
         Call<Pedido> altaPedido(@Header("Authorization") String token,
                                 @Part("clienteId") RequestBody clienteId,
                                 @Part("fecha") RequestBody fecha,
-                                @Part("pagado") RequestBody pagado,
                                 @Part("estadoId") RequestBody estadoId,
                                 @Part("delivery") RequestBody delivery,
                                 @Part("direccionEntrega") RequestBody direccionEntrega,
-                                @Part("importeTotal") RequestBody importeTotal,
-                                @Part("metodoDePago") RequestBody metodoDePago);
+                                @Part("importeTotal") RequestBody importeTotal);
         @Multipart
         @PATCH("pedido/editarpedido")
         Call<Pedido> editarPedido(@Header("Authorization") String token,
                                 @Part("id") RequestBody id,
                                 @Part("clienteId") RequestBody clienteId,
                                 @Part("fecha") RequestBody fecha,
-                                @Part("pagado") RequestBody pagado,
                                 @Part("estadoId") RequestBody estadoId,
                                 @Part("delivery") RequestBody delivery,
                                 @Part("direccionEntrega") RequestBody direccionEntrega,
-                                @Part("importeTotal") RequestBody importeTotal,
-                                @Part("metodoDePago") RequestBody metodoDePago);
+                                @Part("importeTotal") RequestBody importeTotal);
 
-        /// Hasta Aqui llegamos
+
         @Multipart
-        @PATCH("pedido/registrarpago")
-        Call<Pedido> registrarPago(@Header("Authorization") String token,
-                                @Part("pedidoId") RequestBody idPedido,
-                                @Part("metodoDePago") RequestBody metodoDePago,
-                                @Part("pagado") RequestBody pagado);
+        @POST("pago/registrarpago")
+        Call<Pago> registrarPago(@Header("Authorization") String token,
+                                 @Part("pedidoId") RequestBody idPedido,
+                                 @Part("metodoDePago") RequestBody metodoDePago,
+                                 @Part("importe") RequestBody importe);
 
         @GET("pedido/listarPedidosdeUsuario")
         Call<List<Pedido>> listarPedidosPorUsuario(@Header("Authorization") String token);

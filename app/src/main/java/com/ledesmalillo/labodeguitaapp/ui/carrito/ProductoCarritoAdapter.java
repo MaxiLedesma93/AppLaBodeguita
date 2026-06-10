@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ledesmalillo.labodeguitaapp.Modelos.ItemCarrito;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -49,15 +50,12 @@ public class ProductoCarritoAdapter extends RecyclerView.Adapter <ProductoCarrit
     @Override
     public void onBindViewHolder(@NonNull ProductoCarritoAdapter.ViewHolder holder, int position) {
         Producto p = lista.get(holder.getAdapterPosition()).getProducto();
-        //URL maxi String URL = "http://192.168.1.35:5000/";
-        //URL lula String URL = "http://192.168.100.9:5000/";
-        //carritoViewModel = new ViewModelProvider((ViewModelStoreOwner) root.getContext()).get(CarritoViewModel.class);
-        String URL = "http://192.168.1.35:5000/";
+
         holder.tvNombreProducto.setText(p.getNombre());
         holder.tvPrecioProducto.setText(p.getPrecio() != null ? "$ " + p.getPrecio().toString() : "-");
         holder.tvDescripcionProducto.setText(p.getDescripcion());
         Glide.with(root.getContext())
-                .load(URL + p.getFoto())
+                .load(Constantes.URL_BASE + p.getFoto())
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
                 .skipMemoryCache(true)
                 .into(holder.ivFotoProducto);

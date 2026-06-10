@@ -70,38 +70,4 @@ public class PedidosViewModel extends AndroidViewModel {
         });
     }
 
-
-    /*
-    public void calcularTotal(int idPedido) {
-
-        List<Detalle> listaActual = listaDetalle.getValue();
-        double sumaTotal = 0;
-        SharedPreferences sp = ApiClient.conectar(context);
-        String t = sp.getString("token", "vacio");
-        Call<List<Detalle>> lista = ApiClient.getEndPoints().obtenerDetallePorPedido(t, idPedido);
-        lista.enqueue(new Callback<List<Detalle>>() {
-            @Override
-            public void onResponse(Call<List<Detalle>> call, Response<List<Detalle>> response) {
-                if(response.isSuccessful()){
-                    listaDetalle.setValue(response.body());
-                }else{
-                    Toast.makeText(context, "No se encontraron Productos(On response)", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Detalle>> call, Throwable t) {
-                Toast.makeText(context, "Se produjo un error(failure)", Toast.LENGTH_LONG).show();
-                Log.d("salida", t.getMessage());
-            }
-        });
-        if (listaActual != null) {
-            for (Detalle detalle : listaActual) {
-                //sumaTotal += pedido.getProducto().getPrecio() * ite.getCantidad();
-
-
-            }
-        }
-        total.setValue(sumaTotal);
-    } */
 }

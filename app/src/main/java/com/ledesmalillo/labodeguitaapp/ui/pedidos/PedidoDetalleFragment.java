@@ -69,10 +69,6 @@ public class PedidoDetalleFragment extends Fragment {
             }
         });
         mViewModel.setPedido(getArguments());
-
         return binding.getRoot();
     }
-
-
-
 }

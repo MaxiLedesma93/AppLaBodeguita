@@ -23,6 +23,7 @@ import com.ledesmalillo.labodeguitaapp.databinding.FragmentCarritoBinding;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
 import com.ledesmalillo.labodeguitaapp.ui.pedidos.PagoBottomSheet;
 import com.ledesmalillo.labodeguitaapp.ui.productos.CrearProductoFragment;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,11 +67,11 @@ public class CarritoFragment extends Fragment {
                 binding.btnRealizarPedido.setEnabled(carritoViewModel.habilitarBotonRealizarPedido());
             }
         });
-        binding.radioGroupEntrega.check(binding.rbDelivery.getId());
+        binding.radioGroupEntrega.check(binding.rbRetiroLocal.getId());
         binding.etDireccionEntrega.setText(carritoViewModel.asignarDireccion(
                 binding.rbDelivery.getId(),binding.rbRetiroLocal.getId(),
-                binding.rbDelivery.getId()).toString());
-        //carritoViewModel.asignarDireccion();
+                binding.rbRetiroLocal.getId()).toString());
+
         binding.radioGroupEntrega.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int idSeleccionado){
@@ -107,8 +108,8 @@ public class CarritoFragment extends Fragment {
                 int id_pedido_editar = 0;
                 Bundle args = getArguments();
                 if(args!=null){
-                     esEdicion = args.getBoolean("editar_pedido", false);
-                     id_pedido_editar = args.getInt("id_pedido", 0);
+                     esEdicion = args.getBoolean(Constantes.KEY_EDITAR_PEDIDO, false);
+                     id_pedido_editar = args.getInt(Constantes.KEY_ID_PEDIDO, 0);
                 }
 
 

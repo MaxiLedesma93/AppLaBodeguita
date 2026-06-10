@@ -15,6 +15,7 @@ import com.ledesmalillo.labodeguitaapp.Modelos.Detalle;
 import com.ledesmalillo.labodeguitaapp.Modelos.Pedido;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 import java.util.List;
 
@@ -60,8 +61,8 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
             carritoViewModel.agregarAlCarrito(detalle.getProducto(), detalle.getCantidad());
         }
         Bundle bundle = new Bundle();
-        bundle.putBoolean("editar_pedido", editar);
-        bundle.putInt("id_pedido", pedido.getId());
+        bundle.putBoolean(Constantes.KEY_EDITAR_PEDIDO, editar);
+        bundle.putInt(Constantes.KEY_ID_PEDIDO, pedido.getId());
         Navigation.findNavController(root).navigate(R.id.nav_carrito, bundle);
     }
 }

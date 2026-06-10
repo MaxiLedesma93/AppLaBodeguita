@@ -25,6 +25,7 @@ import com.ledesmalillo.labodeguitaapp.Modelos.RealPathUtil;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
 import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewState;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 
 import java.io.File;
@@ -79,9 +80,9 @@ public class CrearProductoViewModel extends AndroidViewModel {
     }
 
     public void iniciar(Bundle arguments) {
-        if (arguments != null && arguments.containsKey("producto_para_editar")) {
+        if (arguments != null && arguments.containsKey(Constantes.KEY_PRODUCTO_EDITAR)) {
             // MODO EDITAR
-            this.productoOriginal = (Producto) arguments.getSerializable("producto_para_editar");
+            this.productoOriginal = (Producto) arguments.getSerializable(Constantes.KEY_PRODUCTO_EDITAR);
             String descTipo ="";
             if(productoOriginal.getIdTipo() == 1){
                 descTipo = "Comida";
@@ -93,11 +94,10 @@ public class CrearProductoViewModel extends AndroidViewModel {
                     productoOriginal.getNombre(),
                     productoOriginal.getDescripcion(),
                     productoOriginal.getPrecio() != null ? productoOriginal.getPrecio().toString() : "",
-                    "http://192.168.1.35:5000/" + productoOriginal.getFoto(),
+                    Constantes.URL_BASE + productoOriginal.getFoto(),
                     descTipo
 
             );
-            //Log.d("URL FOTO " , "http://192.168.1.35:5000/" + productoOriginal.getFoto());
             arguments.clear();
             estado.setValue(estadoDeEdicion);
         } else {

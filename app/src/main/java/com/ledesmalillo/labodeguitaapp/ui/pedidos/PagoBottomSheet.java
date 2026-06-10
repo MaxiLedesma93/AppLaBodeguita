@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 import java.util.Locale;
 
@@ -60,11 +61,9 @@ public class PagoBottomSheet extends BottomSheetDialogFragment {
             Toast.makeText(getContext(), "Redirigiendo a Mercado Pago...", Toast.LENGTH_SHORT).show();
             // 1. El link de Mercado Pago (usualmente lo genera tu API de .NET)
             // Por ahora usaremos uno de prueba, pero aquí iría la URL que te da MP
-            //String urlMercadoPago = "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=labodeguitasl";
-            String urlMercadoPago = "https://link.mercadopago.com.ar/labodeguitasl";
             // 2. Crear el Intent para abrir el navegador o la App de Mercado Pago
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(urlMercadoPago));
+            intent.setData(Uri.parse(Constantes.URL_MERCADO_PAGO));
             startActivity(intent);
             dismiss();
         });

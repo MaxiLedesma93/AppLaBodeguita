@@ -23,6 +23,7 @@ import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentProductoDetalleBinding;
 import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 import java.util.Locale;
 
@@ -49,12 +50,12 @@ public class ProductoDetalleFragment extends Fragment {
         mViewModel.getProducto().observe(getViewLifecycleOwner(), new Observer<Producto>() {
             @Override
             public void onChanged(Producto producto){
-                String URL = "http://192.168.1.35:5000/";
+
                 binding.tvDetProductoNombre.setText(producto.getNombre());
                 binding.tvDetProductoDescripcion.setText("Ingredientes: "+producto.getDescripcion());
                 binding.tvDetProductoPrecio.setText(producto.getPrecio() != null ? "Precio: $ " + producto.getPrecio().toString() : "-" );
                 Glide.with(binding.getRoot().getContext())
-                        .load(URL + producto.getFoto())
+                        .load(Constantes.URL_BASE + producto.getFoto())
                         .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
                         .skipMemoryCache(true)
                         .into(binding.ivDetProductoFoto);
@@ -86,7 +87,7 @@ public class ProductoDetalleFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("producto_para_editar", mViewModel.getProducto().getValue());
+                bundle.putSerializable(Constantes.KEY_PRODUCTO_EDITAR, mViewModel.getProducto().getValue());
                 Navigation.findNavController(view).navigate(R.id.action_productoDetalleFragment_to_crearProductoFragment, bundle);
             }
         });

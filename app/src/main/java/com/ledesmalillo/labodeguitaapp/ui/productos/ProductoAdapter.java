@@ -12,6 +12,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
+
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,12 +45,12 @@ public class ProductoAdapter extends RecyclerView.Adapter <ProductoAdapter.ViewH
         Producto p = lista.get(position);
         //URL maxi String URL = "http://192.168.1.35:5000/";
         //URL lula String URL = "http://192.168.100.9:5000/";
-        String URL = "http://192.168.1.35:5000/";
+
         holder.tvNombreProducto.setText(p.getNombre());
         holder.tvPrecioProducto.setText(p.getPrecio() != null ? "$ " + p.getPrecio().toString() : "-" );
         holder.tvDescripcionProducto.setText(p.getDescripcion());
         Glide.with(root.getContext())
-                .load(URL + lista.get(position).getFoto())
+                .load(Constantes.URL_BASE + lista.get(position).getFoto())
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
                 .skipMemoryCache(true)
                 .into(holder.ivFotoProducto);

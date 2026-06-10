@@ -68,7 +68,7 @@ public class CrearProductoFragment extends Fragment {
                 // El Fragment no piensa, solo obedece al ViewState
                 //en caso de ser creacion estado.getNombre() == "".
                 //En caso de edicion, estado.getNombre() va a traer el dato del producto a editar.
-                String URL = "http://192.168.1.35:5000/";
+
                 binding.etNombreProducto.setText(estado.getNombre());
                 binding.etDescripcionProducto.setText(estado.getDescripcion());
                 binding.etPrecioProducto.setText(estado.getPrecio());
@@ -82,14 +82,6 @@ public class CrearProductoFragment extends Fragment {
 
             }
         });
-        /*mViewModel.getUriMutableLiveData().observe(getViewLifecycleOwner(), new Observer<Uri>() {
-                    @Override
-                    public void onChanged(Uri uri) {
-                        binding.ivFotoProducto.setImageURI(uri);
-                    }
-                });
-
-         */
 
 
         binding.btnImagen.setOnClickListener(new View.OnClickListener() {

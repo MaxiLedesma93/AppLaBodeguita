@@ -15,7 +15,7 @@ public class Pago implements Serializable {
         this.id = id;
         this.metodoDePago = metodoDePago;
         this.pedidoId = pedidoId;
-        this.importe = importe;
+        this.importe = importe
     }
 
     public int getId() {

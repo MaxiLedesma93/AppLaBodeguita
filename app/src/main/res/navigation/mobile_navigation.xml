@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/nav_usuario"
         android:name="com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioFragment"
-        android:label="@string/menu_gallery"
+        android:label="Mi Perfil"
         tools:layout="@layout/fragment_usuario" >
         <action
             android:id="@+id/action_nav_usuario_to_nav_perfil2"
@@ -51,10 +51,20 @@
     <fragment
         android:id="@+id/crearProductoFragment"
         android:name="com.ledesmalillo.labodeguitaapp.ui.productos.CrearProductoFragment"
-        android:label="fragment_crear_producto"
+        android:label="Alta/Edicion de Producto"
         tools:layout="@layout/fragment_crear_producto" />
     <fragment
         android:id="@+id/pedidoDetalleFragment"
         android:name="com.ledesmalillo.labodeguitaapp.ui.pedidos.PedidoDetalleFragment"
-        android:label="PedidoDetalleFragment" />
+        android:label="Detalle de Pedido" />
+    <fragment
+        android:id="@+id/pagosFragment"
+        android:name="com.ledesmalillo.labodeguitaapp.ui.pagos.PagosFragment"
+        android:label="Pagos"
+        tools:layout="@layout/fragment_pagos" />
+    <fragment
+        android:id="@+id/nav_logoutFragment"
+        android:name="com.ledesmalillo.labodeguitaapp.ui.logout.LogoutFragment"
+        android:label="Cerrar Sesion"
+        tools:layout="@layout/fragment_logout" />
 </navigation>

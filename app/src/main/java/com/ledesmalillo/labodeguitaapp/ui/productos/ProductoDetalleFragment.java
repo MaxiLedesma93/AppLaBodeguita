@@ -24,6 +24,7 @@ import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentProductoDetalleBinding;
 import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
 import com.ledesmalillo.labodeguitaapp.utils.Constantes;
+import com.ledesmalillo.labodeguitaapp.utils.SessionManager;
 
 import java.util.Locale;
 
@@ -83,6 +84,7 @@ public class ProductoDetalleFragment extends Fragment {
 
             }
         });
+        binding.btnEditarProducto.setVisibility(SessionManager.esRecepcionista(getContext()) ? View.VISIBLE : View.GONE);
         binding.btnEditarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

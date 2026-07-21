@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ledesmalillo.labodeguitaapp.Modelos.Detalle;
+import com.ledesmalillo.labodeguitaapp.Modelos.Estado;
 import com.ledesmalillo.labodeguitaapp.Modelos.Pago;
+import com.ledesmalillo.labodeguitaapp.Modelos.PagoDetalle;
 import com.ledesmalillo.labodeguitaapp.Modelos.Pedido;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
@@ -156,6 +158,18 @@ public class ApiClient {
         @GET("pedido/listarPedidosdeUsuario")
         Call<List<Pedido>> listarPedidosPorUsuario(@Header("Authorization") String token);
 
+        @GET("pedido/ListarPedidos/{idEstado}")
+        Call<List<Pedido>> listarPedidosPorEstado(@Header("Authorization") String token,
+                                                  @Path("idEstado") int idEstado);
+        @Multipart
+        @PATCH("pedido/CambiarEstadoPedido")
+        Call<Pedido> cambiarEstadoPedido(@Header("Authorization") String token,
+                                         @Part("idPedido") RequestBody idPedido,
+                                         @Part("idEstado") RequestBody idEstado);
+
+        @GET ("estado/listarEstados")
+        Call<List<Estado>> listarEstados(@Header("Authorization") String token);
+
 
 
 
@@ -178,6 +192,10 @@ public class ApiClient {
         @DELETE("detalle/borrardetalle/{id}")
         Call<Detalle> borrarDetalle(@Header("Authorization") String token,
                                     @Path("id") int id);
+
+        @GET("pago/TotalFacturadoFecha/{fecha}")
+        Call<List<PagoDetalle>> obtenerTotalFacturado(@Header("Authorization") String token,
+                                                      @Path("fecha") String fecha);
 
 
 

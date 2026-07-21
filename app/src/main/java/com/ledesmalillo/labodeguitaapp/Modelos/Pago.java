@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 public class Pago implements Serializable {
     private int id;
-    private int idPedido;
+    private int pedidoId;
     private String metodoDePago;
     private Double importe;
 
     public Pago() {
     }
 
-    public Pago(int id, String metodoDePago, int idPedido,  Double importe) {
+    public Pago(int id, String metodoDePago, int pedidoId,  Double importe) {
         this.id = id;
         this.metodoDePago = metodoDePago;
-        this.idPedido = idPedido;
+        this.pedidoId = pedidoId;
         this.importe = importe;
     }
 
@@ -26,12 +26,12 @@ public class Pago implements Serializable {
         this.id = id;
     }
 
-    public int getIdPedido() {
-        return idPedido;
+    public int getPedidoId() {
+        return pedidoId;
     }
 
-    public void setIdPedido(int idPedido) {
-        this.idPedido = idPedido;
+    public void setPedidoId(int pedidoId) {
+        this.pedidoId = pedidoId;
     }
 
     public String getMetodoDePago() {

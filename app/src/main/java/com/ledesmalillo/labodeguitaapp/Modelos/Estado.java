@@ -26,4 +26,8 @@ public class Estado implements Serializable {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public String toString(){
+        return descripcion;
+    }
 }

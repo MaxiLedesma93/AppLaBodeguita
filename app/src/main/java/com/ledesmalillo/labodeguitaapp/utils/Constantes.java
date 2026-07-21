@@ -11,6 +11,8 @@ public class Constantes {
     //ip maxi 192.168.1.35
     //ip lula 192.168.100.9
     public static final String URL_BASE = "http://192.168.1.35:5000/";
+    public static final String URL_LOGO = URL_BASE + "uploads/logo_la_bodeguita.jpeg";
+
 
     // --- CLAVES PARA BUNDLES / ARGUMENTOS ---
     public static final String KEY_PRODUCTO_EDITAR = "producto_para_editar";

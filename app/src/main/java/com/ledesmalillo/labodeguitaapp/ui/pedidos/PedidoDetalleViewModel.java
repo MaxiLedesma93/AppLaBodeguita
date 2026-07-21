@@ -1,28 +1,40 @@
 package com.ledesmalillo.labodeguitaapp.ui.pedidos;
 
+
+
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Detalle;
+import com.ledesmalillo.labodeguitaapp.Modelos.Estado;
 import com.ledesmalillo.labodeguitaapp.Modelos.Pedido;
 import com.ledesmalillo.labodeguitaapp.R;
+import com.ledesmalillo.labodeguitaapp.request.ApiClient;
 import com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoViewModel;
 import com.ledesmalillo.labodeguitaapp.utils.Constantes;
+import com.ledesmalillo.labodeguitaapp.utils.SessionManager;
 
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PedidoDetalleViewModel extends AndroidViewModel {
-    private MutableLiveData<Pedido> mPedido;
-    private Pedido pedido;
+    private MutableLiveData<Pedido> mPedido = new MutableLiveData<>();
+    private MutableLiveData<List<Estado>> mEstados = new MutableLiveData<>();
     private Context context;
 
     public PedidoDetalleViewModel(@NonNull Application application) {
@@ -30,39 +42,85 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
         context = application.getApplicationContext();
     }
 
-    public MutableLiveData<Pedido> getPedido() {
-        if (mPedido == null) {
-            mPedido = new MutableLiveData<>();
-        }
+    public LiveData<Pedido> getPedido() {
         return mPedido;
+    }
+
+    public LiveData<List<Estado>> getEstados() {
+        return mEstados;
     }
 
     public void setPedido(Bundle bundle) {
         if (bundle != null) {
-            pedido = (Pedido) bundle.getSerializable("Pedido");
+            Pedido pedido = (Pedido) bundle.getSerializable("Pedido");
             mPedido.setValue(pedido);
         }
     }
 
+    public void cargarEstados() {
+        String token = SessionManager.getToken(context);
+        ApiClient.getEndPoints().listarEstados(token).enqueue(new Callback<List<Estado>>() {
+            @Override
+            public void onResponse(Call<List<Estado>> call, Response<List<Estado>> response) {
+                if (response.isSuccessful()) {
+                    mEstados.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Estado>> call, Throwable t) {
+                Toast.makeText(context, "Error al cargar estados", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void actualizarEstadoPedido(int idEstadoSeleccionado) {
+        Pedido actual = mPedido.getValue();
+        if (actual == null) return;
+
+        String token = SessionManager.getToken(context);
+        RequestBody idPedido = RequestBody.create(MediaType.parse("application/json"), String.valueOf(actual.getId()));
+        RequestBody idEstado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idEstadoSeleccionado));
+
+        ApiClient.getEndPoints().cambiarEstadoPedido(token, idPedido, idEstado)
+                .enqueue(new Callback<Pedido>() {
+                    @Override
+                    public void onResponse(Call<Pedido> call, Response<Pedido> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            mPedido.setValue(response.body());
+                            Toast.makeText(context, "Estado actualizado", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Pedido> call, Throwable t) {
+                        Toast.makeText(context, "Error al actualizar estado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 
     public String getProductosString(Pedido pedido) {
-        String productos = "";
+        StringBuilder productos = new StringBuilder();
         List<Detalle> detalles = pedido.getDetalles();
-        for (Detalle detalle : detalles) {
-            productos += detalle.getProducto().getNombre() + " x " + detalle.getCantidad() + "\n";
+        if (detalles != null) {
+            for (Detalle detalle : detalles) {
+                productos.append(detalle.getProducto().getNombre()).append(" x ").append(detalle.getCantidad()).append("\n");
+            }
         }
-
-        return productos;
+        return productos.toString();
     }
-    public void enviarItemsCarrito(List<Detalle> detalles, View root,
-                                   CarritoViewModel carritoViewModel, boolean editar){
+
+    public void enviarItemsCarrito(List<Detalle> detalles, View root, CarritoViewModel carritoViewModel, boolean editar) {
+        Pedido actual = mPedido.getValue();
+        if (actual == null) return;
+        
         carritoViewModel.reiniciarMutableCarrito();
         for (Detalle detalle : detalles) {
             carritoViewModel.agregarAlCarrito(detalle.getProducto(), detalle.getCantidad());
         }
         Bundle bundle = new Bundle();
         bundle.putBoolean(Constantes.KEY_EDITAR_PEDIDO, editar);
-        bundle.putInt(Constantes.KEY_ID_PEDIDO, pedido.getId());
+        bundle.putInt(Constantes.KEY_ID_PEDIDO, actual.getId());
         Navigation.findNavController(root).navigate(R.id.nav_carrito, bundle);
     }
 }

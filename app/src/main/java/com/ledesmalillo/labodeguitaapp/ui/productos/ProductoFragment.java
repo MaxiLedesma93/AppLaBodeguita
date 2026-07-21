@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.FragmentProductoBinding;
+import com.ledesmalillo.labodeguitaapp.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,7 @@ public class ProductoFragment extends Fragment {
                 mViewModel.mostrarProductos("Bebida");
             }
         });
+        binding.fabAgregarProducto.setVisibility(SessionManager.esRecepcionista(getContext()) ? View.VISIBLE : View.GONE);
         binding.fabAgregarProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

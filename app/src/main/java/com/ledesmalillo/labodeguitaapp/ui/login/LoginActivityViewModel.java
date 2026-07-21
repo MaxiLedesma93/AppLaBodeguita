@@ -51,6 +51,7 @@ public class LoginActivityViewModel extends AndroidViewModel {
                             iniciarMenu(bundle);
                             editor.putString("direccion",response.body().getDireccion());
                             editor.putString("idCliente", String.valueOf(response.body().getId()));
+                            editor.putString("rol", response.body().getRol());
                             editor.apply();
                         }
 

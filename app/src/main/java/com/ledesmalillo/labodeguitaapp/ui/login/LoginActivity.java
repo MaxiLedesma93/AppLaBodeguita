@@ -11,9 +11,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.databinding.ActivityLoginBinding;
 import com.ledesmalillo.labodeguitaapp.ui.usuario.RegistroActivity;
+import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,5 +54,10 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
+        Glide.with(binding.getRoot().getContext())
+                .load(Constantes.URL_LOGO )
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // No usar caché de disco
+                .skipMemoryCache(true)
+                .into(binding.imageView2);
     }
 }

@@ -62,19 +62,13 @@ public class PedidoAdapter extends RecyclerView.Adapter<PedidoAdapter.ViewHolder
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+        holder.tvTituloCPedido.setText("Pedido " + p.getId());
         holder.tvCantProductosPedido.setText(obtenerCantProductos(p.getDetalles()));
         holder.tvPrecioPedido.setText("$"+ String.valueOf(p.getImporteTotal()));
         holder.tvEstadoPedido.setText(p.getEstado().getDescripcion());
 
 
-        //falta manejar ver detalle del pedido
-        /*holder.btnVerDetallePedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enviarItemsCarrito(p.getDetalles());
-            }
-        });
-        */
+
         holder.btnVerDetallePedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

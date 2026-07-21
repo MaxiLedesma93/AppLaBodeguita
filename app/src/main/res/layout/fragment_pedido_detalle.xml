@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
-    tools:context=".ui.productos.ProductoDetalleFragment">
+    tools:context=".ui.pedidos.PedidoDetalleFragment">
 
     <!-- Título -->
     <TextView
@@ -62,18 +62,29 @@
         app:layout_constraintStart_toEndOf="@+id/labelEstado"
         app:layout_constraintTop_toTopOf="@+id/labelEstado" />
 
+    <Button
+        android:id="@+id/btnCambiarEstado"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cambiar Estado"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/tvDetEstadoPedido"
+        app:layout_constraintTop_toBottomOf="@+id/tvDetEstadoPedido" />
+
     <!-- Fecha -->
     <TextView
         android:id="@+id/labelFecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:text="Fecha:"
         android:textStyle="bold"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelEstado" />
+        app:layout_constraintTop_toBottomOf="@+id/btnCambiarEstado" />
 
     <TextView
         android:id="@+id/tvDetFechaPedido"
@@ -89,7 +100,7 @@
         app:layout_constraintStart_toEndOf="@+id/labelFecha"
         app:layout_constraintTop_toTopOf="@+id/labelFecha" />
 
-    <!-- Dirección (EL CAMPO CON PROBLEMAS) -->
+    <!-- Dirección -->
     <TextView
         android:id="@+id/labelDireccion"
         android:layout_width="wrap_content"
@@ -108,7 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="24dp"
-        android:text="Aquí va la dirección que ahora puede ser muy larga"
+        android:text="Dirección..."
         android:textAlignment="textEnd"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -159,14 +170,15 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollProductosDetalle"
-        android:layout_width="383dp"
+        android:layout_width="0dp"
         android:layout_height="242dp"
         android:layout_marginTop="12dp"
+        android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:background="#EDEDED"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/labelProductos"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelProductos">
 
         <TextView
@@ -181,12 +193,10 @@
         android:id="@+id/btnEditarPedido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Editar"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollProductosDetalle"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollProductosDetalle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

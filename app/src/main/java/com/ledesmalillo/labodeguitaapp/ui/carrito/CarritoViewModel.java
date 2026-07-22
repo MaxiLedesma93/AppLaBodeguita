@@ -126,12 +126,12 @@ public class CarritoViewModel extends AndroidViewModel {
         SharedPreferences sp = ApiClient.conectar(context);
         String token = sp.getString("token", "no token");
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();
-        String idCliente = sp.getString("idCliente", "Sin id");
-        String delEstado = deliveryEstado ? "true" : "false";
+       // String idCliente = sp.getString("idCliente", "Sin id");
+       // String delEstado = deliveryEstado ? "true" : "false";
         // para evitar que al precio se le agregue un 0 que es el que esta luego del .
         // reemplazamos el . por la ,
-        String importeConPunto = String.valueOf(total.getValue()); // Ejemplo: "10.0"
-        String importeConComa = importeConPunto.replace('.', ','); // Resultado: "10,0"
+       // String importeConPunto = String.valueOf(total.getValue()); // Ejemplo: "10.0"
+       // String importeConComa = importeConPunto.replace('.', ','); // Resultado: "10,0"
 
 
 
@@ -140,25 +140,14 @@ public class CarritoViewModel extends AndroidViewModel {
         String fechaFormateada = sdf.format(fechaActual);
 
 
-
-        RequestBody clienteId = RequestBody.create(MediaType.parse("application/json"),
-                idCliente);
-        RequestBody fecha = RequestBody.create(MediaType.parse("application/json"),
-                fechaFormateada);
-
-        RequestBody estadoId = RequestBody.create(MediaType.parse("application/json"),
-                "1");
-        RequestBody delivery = RequestBody.create(MediaType.parse("application/json"),
-                delEstado);
-        RequestBody direccionEntrega = RequestBody.create(MediaType.parse("application/json"),
-                direccionPedido);
-
-        RequestBody importeTotal = RequestBody.create(MediaType.parse("application/json"), importeConComa);
-
-
-
-        Call<Pedido> pedidoCall = api.altaPedido(token, clienteId, fecha, estadoId,
-                delivery, direccionEntrega, importeTotal);
+        Pedido pedido = new Pedido();
+        pedido.setDelivery(deliveryEstado);
+        pedido.setDireccionEntrega(direccionPedido);
+        pedido.setFecha(fechaFormateada);
+        pedido.setEstadoId(1);
+        pedido.setImporteTotal(total.getValue());
+        //if total.getValue() > 1500 se realiza el alta.
+        Call<Pedido> pedidoCall = api.altaPedido(token, pedido );
         pedidoCall.enqueue(new Callback<Pedido>() {
             @Override
             public void onResponse(Call<Pedido> call, Response<Pedido> response) {

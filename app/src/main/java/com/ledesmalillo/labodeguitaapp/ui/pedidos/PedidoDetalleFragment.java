@@ -74,15 +74,17 @@ public class PedidoDetalleFragment extends Fragment {
         binding.btnCambiarEstado.setVisibility(SessionManager.esRecepcionista(getContext()) ? View.VISIBLE : View.GONE);
         binding.btnCambiarEstado.setOnClickListener(v -> mViewModel.cargarEstados());
 
+        binding.btnRepetirPedido.setVisibility(SessionManager.esRecepcionista(getContext()) ? View.GONE : View.VISIBLE);
         binding.btnRepetirPedido.setOnClickListener(v -> 
             mViewModel.enviarItemsCarrito(mViewModel.getPedido().getValue().getDetalles(), v, carritoViewModel, false)
         );
-
+        binding.btnEditarPedido.setVisibility(SessionManager.esRecepcionista(getContext()) ? View.GONE : View.VISIBLE);
         binding.btnEditarPedido.setOnClickListener(v -> 
             mViewModel.enviarItemsCarrito(mViewModel.getPedido().getValue().getDetalles(), v, carritoViewModel, true)
         );
 
         mViewModel.setPedido(getArguments());
+        mViewModel.getPedido();
         return binding.getRoot();
     }
 

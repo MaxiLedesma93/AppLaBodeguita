@@ -2,6 +2,7 @@ package com.ledesmalillo.labodeguitaapp.ui.usuario;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
+import com.ledesmalillo.labodeguitaapp.ui.login.LoginActivity;
+import com.ledesmalillo.labodeguitaapp.utils.SessionManager;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -52,7 +55,6 @@ public class UsuarioViewModel extends AndroidViewModel {
         if(estadoNuevo == null){
             estadoNuevo = new MutableLiveData<>();
         }
-        //estado.setValue(new UsuarioViewState)
         return estadoNuevo;
     }
 
@@ -82,15 +84,6 @@ public class UsuarioViewModel extends AndroidViewModel {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        // Creamos el estado de "vista" y lo cargamos con el usuario, deshabilitamos los campos
-        // y ocultamos el boton de editar.
-        /*UsuarioViewState estadoDeVista = new UsuarioViewState(
-                usuarioOriginal,
-                false, // Campos deshabilitados por defecto
-                View.VISIBLE, // Botón Editar visible
-                View.GONE     // Botón Guardar oculto
-        );
-        estado.setValue(estadoDeVista); */
     }
     // MODO CREACIÓN
     public void prepararNuevoUsuario() {
@@ -174,6 +167,14 @@ public class UsuarioViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     usuarioOriginal = response.body();
                     Toast.makeText(context, "Usuario registrado con Exito!", Toast.LENGTH_LONG).show();
+                    // despues de este cartel tengo q volver al login
+                    // 1. Limpiar SharedPreferences
+                    SessionManager.cerrarSesion(context);
+
+                    // 2. Navegar al Login y limpiar el stack
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    context.startActivity(intent);
                 }
             }
 

@@ -85,17 +85,9 @@ public class ApiClient {
         @PATCH("usuario/editar")
         Call<Usuario> editarUsuario(@Header("Authorization") String token, @Body Usuario usuario);
 
-        @Multipart
+
         @POST("usuario/registrar")
-        Call<Usuario> registrarUsuario(@Header("Authorization") String token,
-                                       @Part("nombre") RequestBody nombre,
-                                       @Part("apellido") RequestBody apellido,
-                                       @Part("email") RequestBody email,
-                                       @Part("direccion") RequestBody direccion,
-                                       @Part("telefono") RequestBody telefono,
-                                       @Part("clave")RequestBody clave,
-                                       @Part("rol") RequestBody rol,
-                                       @Part("estado") RequestBody estado);
+        Call<Usuario> registrarUsuario(@Header("Authorization") String token, @Body Usuario usuario);
 
         @GET("producto/listar/{tipoProducto}")
         Call<List<Producto>> listaProductos(@Header("Authorization") String token,
@@ -127,16 +119,11 @@ public class ApiClient {
                                       @Part("tipoproducto") RequestBody tipoProducto,
                                       @Part("id") RequestBody id);
 
-        @Multipart
+
         @POST("pedido/guardarpedido")
         Call<Pedido> altaPedido(@Header("Authorization") String token,
-                                @Part("clienteId") RequestBody clienteId,
-                                @Part("fecha") RequestBody fecha,
-                                @Part("estadoId") RequestBody estadoId,
-                                @Part("delivery") RequestBody delivery,
-                                @Part("direccionEntrega") RequestBody direccionEntrega,
-                                @Part("importeTotal") RequestBody importeTotal);
-        @Multipart
+                                @Body Pedido pedido);
+
         @PATCH("pedido/editarpedido")
         Call<Pedido> editarPedido(@Header("Authorization") String token,
                                 @Part("id") RequestBody id,
@@ -174,7 +161,7 @@ public class ApiClient {
 
 
 
-        @Multipart
+
         @POST("detalle/guardardetalle")
         Call<Detalle> altaDetalle(@Header("Authorization") String token,
                                   @Part("pedidoId") RequestBody pedidoId,
@@ -183,7 +170,7 @@ public class ApiClient {
         @GET("detalle/obtenerdetalleporpedido/{pedidoId}")
         Call<List<Detalle>> obtenerDetallePorPedido(@Header("Authorization") String token,
                                                    @Path("pedidoId") int pedidoId);
-        @Multipart
+
         @PATCH("detalle/editardetalle")
         Call<Detalle> editarDetalle(@Header("Authorization") String token,
                                     @Part("pedidoId") RequestBody pedidoId,

@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
         UsuarioViewModel usuarioViewModel = new ViewModelProvider(this).get(UsuarioViewModel.class);
         carritoViewModel = new ViewModelProvider(this).get(CarritoViewModel.class);
 
-        // Le ordenas al ViewModel que cargue los datos del usuario.
-        // Esto emitirá un estado que el UsuarioFragment (cuando esté visible) recibirá.
+        // hacemos la llamada al metodo cargar CargarUsuarioExistente() del view model
+        // Esto emite un estado para que el UsuarioFragment pueda observar y actualizar la UI
         usuarioViewModel.cargarUsuarioExistente();
 
     }

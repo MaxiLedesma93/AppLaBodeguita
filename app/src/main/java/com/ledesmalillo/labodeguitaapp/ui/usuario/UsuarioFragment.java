@@ -114,7 +114,7 @@ public class UsuarioFragment extends Fragment {
                 usuario.setDireccion(binding.etDireccion.getText().toString());
                 //estos campos no son requeridos pero hay q mandarlos igual en vacio, sino falla el model state
                 usuario.setClave(binding.etClave.getText().toString());
-                usuario.setEstado(true);
+                //usuario.setEstado(true);
                 binding.btnEditar.setVisibility(View.VISIBLE);
                 binding.btnGuardar.setVisibility(View.GONE);
                 uvm.guardarCambios(usuario);
@@ -123,26 +123,11 @@ public class UsuarioFragment extends Fragment {
         });
 
 
-        //uvm.cargarUsuarioExistente();
+
         return binding.getRoot();
 
     }
-    /*private void inicializarVista(View vistaPerfil) {
-        etNombre = vistaPerfil.findViewById(R.id.etNombre);
-        etApellido = vistaPerfil.findViewById(R.id.etApellido);
-        etMail = vistaPerfil.findViewById(R.id.etMail);
-        etTel = vistaPerfil.findViewById(R.id.etTel);
-        etDireccion = vistaPerfil.findViewById(R.id.etDireccion);
-        btGuardar = vistaPerfil.findViewById(R.id.btnEditar);
-        //editar habilita la edicion
-            btEditar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    pvm.guardarDatos();
 
-                }
-            });
-    */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

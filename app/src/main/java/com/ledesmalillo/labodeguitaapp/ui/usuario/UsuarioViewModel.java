@@ -117,10 +117,7 @@ public class UsuarioViewModel extends AndroidViewModel {
             estado.setValue(new UsuarioViewState(usuarioActualizado, false, View.VISIBLE, View.GONE));
         } else {
             // Modo CREACIÓN
-            crearUsuario(usuarioActualizado.getNombre(), usuarioActualizado.getApellido(),
-                    usuarioActualizado.getEmail(), usuarioActualizado.getDireccion(),
-                    usuarioActualizado.getTelefono(), usuarioActualizado.getClave(),
-                    usuarioActualizado.getRol());
+            crearUsuario(usuarioActualizado);
         }
     }
 
@@ -144,23 +141,11 @@ public class UsuarioViewModel extends AndroidViewModel {
             }
         });
     }
-    public void crearUsuario(String nombreUs, String apellidoUs, String emailUs,String direccionUs,
-                             String telefonoUs, String claveUs, String rolUs ){
+    public void crearUsuario(Usuario usuarioNuevo ){
         SharedPreferences sp = ApiClient.conectar(context);
         String t = sp.getString("token", "vacio");
-        //ver como eliminar el token de sharedPreferences cuando cerramos la aplicacion o nos deslogueamos.
-        RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreUs);
-        RequestBody apellido = RequestBody.create(MediaType.parse("application/json"),apellidoUs);
-        RequestBody email = RequestBody.create(MediaType.parse("application/json"),emailUs);
-        RequestBody direccion = RequestBody.create(MediaType.parse("application/json"),direccionUs);
-        RequestBody telefono = RequestBody.create(MediaType.parse("application/json"),telefonoUs);
-        RequestBody clave = RequestBody.create(MediaType.parse("application/json"),claveUs);
-        //validar si el token pertenece a un recepcionista o cliente para dar de alta recepcionista o cliente.
-        RequestBody rol = RequestBody.create(MediaType.parse("application/json"), "Cliente");
-        RequestBody estado = RequestBody.create(MediaType.parse("application/json"),"true");
 
-        Call<Usuario> usuarioCall = ApiClient.getEndPoints().registrarUsuario(t, nombre, apellido, email,
-                direccion, telefono, clave, rol, estado);
+        Call<Usuario> usuarioCall = ApiClient.getEndPoints().registrarUsuario(t,usuarioNuevo);
         usuarioCall.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {

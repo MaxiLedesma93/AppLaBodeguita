@@ -1,10 +1,7 @@
 package com.ledesmalillo.labodeguitaapp.ui.pedidos;
 
-
-
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -74,15 +71,22 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
         });
     }
 
-    public void actualizarEstadoPedido(int idEstadoSeleccionado) {
+    public void actualizarEstadoPedido(int idEstado) {
         Pedido actual = mPedido.getValue();
         if (actual == null) return;
 
         String token = SessionManager.getToken(context);
-        RequestBody idPedido = RequestBody.create(MediaType.parse("application/json"), String.valueOf(actual.getId()));
-        RequestBody idEstado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idEstadoSeleccionado));
+        
+        Pedido pedidoEdit = new Pedido();
+        pedidoEdit.setId(actual.getId());
+        pedidoEdit.setClienteId(actual.getClienteId());
+        pedidoEdit.setFecha(actual.getFecha());
+        pedidoEdit.setEstadoId(idEstado);
+        pedidoEdit.setDelivery(actual.getDelivery());
+        pedidoEdit.setDireccionEntrega(actual.getDireccionEntrega());
+        pedidoEdit.setImporteTotal(actual.getImporteTotal());
 
-        ApiClient.getEndPoints().cambiarEstadoPedido(token, idPedido, idEstado)
+        ApiClient.getEndPoints().editarPedido(token, pedidoEdit)
                 .enqueue(new Callback<Pedido>() {
                     @Override
                     public void onResponse(Call<Pedido> call, Response<Pedido> response) {
@@ -115,12 +119,13 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
         if (actual == null) return;
         
         carritoViewModel.reiniciarMutableCarrito();
+        // PERSISTIMOS EL ESTADO EN EL VIEWMODEL PARA QUE NO SE PIERDA AL NAVEGAR
+        carritoViewModel.setEstadoEdicion(editar, actual.getId());
+        
         for (Detalle detalle : detalles) {
             carritoViewModel.agregarAlCarrito(detalle.getProducto(), detalle.getCantidad());
         }
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(Constantes.KEY_EDITAR_PEDIDO, editar);
-        bundle.putInt(Constantes.KEY_ID_PEDIDO, actual.getId());
-        Navigation.findNavController(root).navigate(R.id.nav_carrito, bundle);
+        
+        Navigation.findNavController(root).navigate(R.id.nav_carrito);
     }
 }

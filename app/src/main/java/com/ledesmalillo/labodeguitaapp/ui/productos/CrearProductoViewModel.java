@@ -16,13 +16,16 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.Navigation;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
 import com.ledesmalillo.labodeguitaapp.Modelos.RealPathUtil;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
+import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
 import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewState;
 import com.ledesmalillo.labodeguitaapp.utils.Constantes;
@@ -77,6 +80,11 @@ public class CrearProductoViewModel extends AndroidViewModel {
             uri = data.getData();
             uriMutableLiveData.setValue(uri);
         }
+    }
+    private MutableLiveData<Boolean> productoGuardadoFlag = new MutableLiveData<>();
+
+    public LiveData<Boolean> getProductoGuardadoFlag() {
+        return productoGuardadoFlag;
     }
 
     public void iniciar(Bundle arguments) {
@@ -157,6 +165,7 @@ public class CrearProductoViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {
                     Toast.makeText(context, "Producto Editado con Exito", Toast.LENGTH_LONG).show();
+                    productoGuardadoFlag.setValue(true);
                 }
 
                 @Override
@@ -172,10 +181,14 @@ public class CrearProductoViewModel extends AndroidViewModel {
             String token = sp.getString("token", "no token");
             String rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
             File archivo = new File(rutaArchivo);
+            // para evitar que al precio se le agregue un 0 que es el que esta luego del .
+            // reemplazamos el . por la ,
+            String precioConPunto = String.valueOf(precioProducto); // Ejemplo: "10.0"
+            String precioConComa = precioConPunto.replace('.', ','); // Resultado: "10,0"
 
             RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
             RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
-            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), String.valueOf(precioProducto));
+            RequestBody precio = RequestBody.create(MediaType.parse("application/json"),precioConComa);
             RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
             RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
             MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
@@ -189,6 +202,8 @@ public class CrearProductoViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<Producto> call, Response<Producto> response) {
                     Toast.makeText(context, "Producto Guardado con Exito", Toast.LENGTH_LONG).show();
+                    productoGuardadoFlag.setValue(true);
+
                 }
 
                 @Override

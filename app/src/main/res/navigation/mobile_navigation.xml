@@ -30,7 +30,11 @@
         android:id="@+id/nav_carrito"
         android:name="com.ledesmalillo.labodeguitaapp.ui.carrito.CarritoFragment"
         android:label="Carrito"
-        tools:layout="@layout/fragment_carrito" />
+        tools:layout="@layout/fragment_carrito" >
+        <action
+            android:id="@+id/action_nav_carrito_to_nav_producto"
+            app:destination="@id/nav_producto" />
+    </fragment>
     <fragment
         android:id="@+id/nav_producto"
         android:name="com.ledesmalillo.labodeguitaapp.ui.productos.ProductoFragment"

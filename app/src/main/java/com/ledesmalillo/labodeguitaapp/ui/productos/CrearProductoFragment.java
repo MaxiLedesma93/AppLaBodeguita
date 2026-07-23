@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -79,6 +80,14 @@ public class CrearProductoFragment extends Fragment {
                         .into(binding.ivFotoProducto);
                 View rbAsociado = binding.rgTipoProducto.findViewWithTag(estado.getTipo());
                 binding.rgTipoProducto.check(rbAsociado.getId());
+
+            }
+        });
+        mViewModel.getProductoGuardadoFlag().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean guardadoFlag) {
+
+                Navigation.findNavController(requireView()).popBackStack();
 
             }
         });

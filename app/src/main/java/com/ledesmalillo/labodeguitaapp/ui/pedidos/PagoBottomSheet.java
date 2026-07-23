@@ -70,7 +70,12 @@ public class PagoBottomSheet extends BottomSheetDialogFragment {
 
         v.findViewById(R.id.btnEfectivo).setOnClickListener(view -> {
             // Guardamos el pedido indicando que se paga en efectivo
-            carritoViewModel.guardarPedido(direccion, esDelivery, false);
+            if(esEdicion){
+                carritoViewModel.editarPedido(id_pedido_editar,direccion, esDelivery, true);
+            }
+            else{
+                carritoViewModel.guardarPedido(direccion, esDelivery, true);
+            }
             dismiss();
         });
 

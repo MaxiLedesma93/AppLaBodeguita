@@ -144,7 +144,6 @@ public class CarritoViewModel extends AndroidViewModel {
         pedido.setDelivery(deliveryEstado);
         pedido.setDireccionEntrega(direccionPedido);
         pedido.setFecha(fechaFormateada);
-        pedido.setEstadoId(1);
         pedido.setImporteTotal(total.getValue());
         //if total.getValue() > 1500 se realiza el alta.
         Call<Pedido> pedidoCall = api.altaPedido(token, pedido );
@@ -157,12 +156,12 @@ public class CarritoViewModel extends AndroidViewModel {
                 String metDePago = null;
                 if(pagadoEstado){
                     metDePago = Constantes.METODO_PAGO_MERCADO_PAGO;
-                    registrarPago(idPedido, metDePago, pagadoEstado, total.getValue());
+                    registrarPago(idPedido, metDePago, total.getValue());
                 }else{
                     metDePago = Constantes.METODO_PAGO_EFECTIVO;
                     // para probar, en realidad el pago en Efectivo lo registra la persona que entrega
                     //el pedido.
-                    registrarPago(idPedido, metDePago, pagadoEstado, total.getValue());
+                    registrarPago(idPedido, metDePago, total.getValue());
                 }
 
             }
@@ -185,8 +184,11 @@ public class CarritoViewModel extends AndroidViewModel {
             RequestBody pedidoId = RequestBody.create(MediaType.parse("application/json"), String.valueOf(pedidoIdValue));
             RequestBody productoId = RequestBody.create(MediaType.parse("application/json"), String.valueOf(item.getProducto().getId()));
             RequestBody cantidad = RequestBody.create(MediaType.parse("application/json"), String.valueOf(item.getCantidad()));
-
-            api.altaDetalle(token, pedidoId, productoId, cantidad).enqueue(new Callback<Detalle>() {
+            Detalle detalle = new Detalle();
+            detalle.setPedidoId(pedidoIdValue);
+            detalle.setProductoId(item.getProducto().getId());
+            detalle.setCantidad(item.getCantidad());
+            api.altaDetalle(token, detalle).enqueue(new Callback<Detalle>() {
                 @Override
                 public void onResponse(Call<Detalle> call, Response<Detalle> response) {
                     // contamos para vaciar el carrito
@@ -208,12 +210,7 @@ public class CarritoViewModel extends AndroidViewModel {
         SharedPreferences sp = ApiClient.conectar(context);
         String token = sp.getString("token", "no token");
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();
-        String idCliente = sp.getString("idCliente", "Sin id");
-        String delEstado = deliveryEstado ? "true" : "false";
-        // para evitar que al precio se le agregue un 0 que es el que esta luego del .
-        // reemplazamos el . por la ,
-        String importeConPunto = String.valueOf(total.getValue()); // Ejemplo: "10.0"
-        String importeConComa = importeConPunto.replace('.', ','); // Resultado: "10,0"
+
         Date fechaActual = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
         String fechaFormateada = sdf.format(fechaActual);
@@ -228,6 +225,7 @@ public class CarritoViewModel extends AndroidViewModel {
                     List<Detalle> listaPedido = response.body();
                     eliminarDetalles(listaPedido, api, token);
                     enviarDetalles(token, idPedido, api);
+
                 }else{
                     Toast.makeText(context, "No se encontraron Productos(On response)", Toast.LENGTH_LONG).show();
                 }
@@ -237,22 +235,18 @@ public class CarritoViewModel extends AndroidViewModel {
                 Toast.makeText(context, "Se produjo un error(failure)", Toast.LENGTH_LONG).show();
             }
         });
-        RequestBody id = RequestBody.create(MediaType.parse("application/json"), String.valueOf(idPedido));
 
-        RequestBody clienteId = RequestBody.create(MediaType.parse("application/json"),
-                idCliente);
-        RequestBody fecha = RequestBody.create(MediaType.parse("application/json"),
-                fechaFormateada);
-        RequestBody estadoId = RequestBody.create(MediaType.parse("application/json"),
-                "1");
-        RequestBody delivery = RequestBody.create(MediaType.parse("application/json"),
-                delEstado);
-        RequestBody direccionEntrega = RequestBody.create(MediaType.parse("application/json"),
-                direccionPedido);
-        RequestBody importeTotal = RequestBody.create(MediaType.parse("application/json"), importeConComa);
+        Pedido pedido = new Pedido();
+        pedido.setId(idPedido);
+        pedido.setDelivery(deliveryEstado);
+        pedido.setDireccionEntrega(direccionPedido);
+        pedido.setFecha(fechaFormateada);
 
-        Call<Pedido> pedidoCall = api.editarPedido(token, id, clienteId, fecha,  estadoId,
-                delivery, direccionEntrega, importeTotal);
+        pedido.setImporteTotal(total.getValue());
+
+        Call<Pedido> pedidoCall = api.editarPedido(token, pedido);
+
+
         pedidoCall.enqueue(new Callback<Pedido>() {
             @Override
             public void onResponse(Call<Pedido> call, Response<Pedido> response) {
@@ -263,7 +257,7 @@ public class CarritoViewModel extends AndroidViewModel {
                 }else{
                     metDePago = Constantes.METODO_PAGO_EFECTIVO;
                 }
-                registrarPago(idPedido, metDePago, pagadoEstado, total.getValue());
+                registrarPago(idPedido, metDePago, total.getValue());
             }
 
             @Override
@@ -283,7 +277,7 @@ public class CarritoViewModel extends AndroidViewModel {
                 detalleCall.enqueue(new Callback<Detalle>() {
                     @Override
                     public void onResponse(Call<Detalle> call, Response<Detalle> response) {
-
+                        Toast.makeText(context, "Detalle Editado con exito", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -294,7 +288,7 @@ public class CarritoViewModel extends AndroidViewModel {
         }
     }
 
-    public void registrarPago(int pedidoId, String metDePago, boolean pagadoEstado, double importePago){
+    public void registrarPago(int pedidoId, String metDePago, double importePago){
         SharedPreferences sp = ApiClient.conectar(context);
         String token = sp.getString("token", "no token");
         ApiClient.MisEndPoints api = ApiClient.getEndPoints();

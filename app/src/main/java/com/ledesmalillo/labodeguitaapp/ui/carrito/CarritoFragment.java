@@ -110,12 +110,14 @@ public class CarritoFragment extends Fragment {
                 if(args!=null){
                      esEdicion = args.getBoolean(Constantes.KEY_EDITAR_PEDIDO, false);
                      id_pedido_editar = args.getInt(Constantes.KEY_ID_PEDIDO, 0);
+                    PagoBottomSheet modal = new PagoBottomSheet(direccion, deliveryChecked, esEdicion, id_pedido_editar);
+                    modal.show(getChildFragmentManager(), "TAG_PAGO");
+                }else {
+                    PagoBottomSheet modal = new PagoBottomSheet(direccion, deliveryChecked, esEdicion, id_pedido_editar);
+                    modal.show(getChildFragmentManager(), "TAG_PAGO");
                 }
 
 
-                // Abrimos el modal
-                PagoBottomSheet modal = new PagoBottomSheet(direccion, deliveryChecked, esEdicion, id_pedido_editar);
-                modal.show(getChildFragmentManager(), "TAG_PAGO");
 
             } else {
                 Toast.makeText(getContext(), "El carrito está vacío", Toast.LENGTH_SHORT).show();

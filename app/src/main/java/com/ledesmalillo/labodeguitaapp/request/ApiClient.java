@@ -125,14 +125,7 @@ public class ApiClient {
                                 @Body Pedido pedido);
 
         @PATCH("pedido/editarpedido")
-        Call<Pedido> editarPedido(@Header("Authorization") String token,
-                                @Part("id") RequestBody id,
-                                @Part("clienteId") RequestBody clienteId,
-                                @Part("fecha") RequestBody fecha,
-                                @Part("estadoId") RequestBody estadoId,
-                                @Part("delivery") RequestBody delivery,
-                                @Part("direccionEntrega") RequestBody direccionEntrega,
-                                @Part("importeTotal") RequestBody importeTotal);
+        Call<Pedido> editarPedido(@Header("Authorization") String token, @Body Pedido pedido);
 
 
         @Multipart
@@ -163,19 +156,11 @@ public class ApiClient {
 
 
         @POST("detalle/guardardetalle")
-        Call<Detalle> altaDetalle(@Header("Authorization") String token,
-                                  @Part("pedidoId") RequestBody pedidoId,
-                                  @Part("productoId") RequestBody productoId,
-                                  @Part("cantidad") RequestBody cantidad);
+        Call<Detalle> altaDetalle(@Header("Authorization") String token , @Body Detalle detalle);
         @GET("detalle/obtenerdetalleporpedido/{pedidoId}")
         Call<List<Detalle>> obtenerDetallePorPedido(@Header("Authorization") String token,
                                                    @Path("pedidoId") int pedidoId);
 
-        @PATCH("detalle/editardetalle")
-        Call<Detalle> editarDetalle(@Header("Authorization") String token,
-                                    @Part("pedidoId") RequestBody pedidoId,
-                                    @Part("productoId") RequestBody productoId,
-                                    @Part("cantidad") RequestBody cantidad);
         @DELETE("detalle/borrardetalle/{id}")
         Call<Detalle> borrarDetalle(@Header("Authorization") String token,
                                     @Path("id") int id);

@@ -108,7 +108,8 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
         List<Detalle> detalles = pedido.getDetalles();
         if (detalles != null) {
             for (Detalle detalle : detalles) {
-                productos.append(detalle.getProducto().getNombre()).append(" x ").append(detalle.getCantidad()).append("\n");
+                double precioDet = detalle.getProducto().getPrecio() * detalle.getCantidad();
+                productos.append(detalle.getProducto().getNombre()).append(" x ").append(detalle.getCantidad()). append(". importe: ").append("$"+precioDet).append("\n");
             }
         }
         return productos.toString();
@@ -127,5 +128,20 @@ public class PedidoDetalleViewModel extends AndroidViewModel {
         }
         
         Navigation.findNavController(root).navigate(R.id.nav_carrito);
+    }
+    public int checkBtnCancelar(Boolean esRecepcionista) {
+        Pedido pedidoActual = mPedido.getValue();
+        if(pedidoActual != null){
+            if(pedidoActual.getEstadoId() == 1 && !esRecepcionista) {
+                return View.VISIBLE;
+            } else {
+                return View.GONE;
+            }
+        }else{
+            Toast.makeText(context, "Error al cargar el pedido", Toast.LENGTH_SHORT).show();
+            return View.GONE;
+        }
+
+
     }
 }

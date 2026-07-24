@@ -63,6 +63,8 @@ public class PedidoDetalleFragment extends Fragment {
             binding.tvDetDireccionPedido.setText(pedido.getDireccionEntrega());
             binding.tvDetImportePedido.setText("$ " + String.format(Locale.getDefault(), "%.2f", pedido.getImporteTotal()));
             binding.tvDetProductosPedido.setText(mViewModel.getProductosString(pedido));
+            binding.btnCancelarPedido.setVisibility(mViewModel.checkBtnCancelar(SessionManager.esRecepcionista(getContext())));
+
         });
 
         // Observamos los estados para mostrar el diálogo

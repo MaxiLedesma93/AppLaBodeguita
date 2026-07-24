@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -18,20 +17,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.navigation.Navigation;
 
 import com.ledesmalillo.labodeguitaapp.Modelos.Producto;
-import com.ledesmalillo.labodeguitaapp.Modelos.RealPathUtil;
-
-import com.ledesmalillo.labodeguitaapp.Modelos.Usuario;
-import com.ledesmalillo.labodeguitaapp.R;
 import com.ledesmalillo.labodeguitaapp.request.ApiClient;
-import com.ledesmalillo.labodeguitaapp.ui.usuario.UsuarioViewState;
 import com.ledesmalillo.labodeguitaapp.utils.Constantes;
 
-
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -42,178 +38,132 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CrearProductoViewModel extends AndroidViewModel {
-    private MutableLiveData<Uri> uriMutableLiveData;
-    private Uri uri;
-    private MutableLiveData<Bitmap> mFoto;
-    private  MutableLiveData<ProductoViewState> estado = new MutableLiveData<>();
-    private  MutableLiveData<ProductoViewState> estadoNuevo = new MutableLiveData<>();
-    private Producto productoOriginal; // Para guardar el producto que estamos editando
-
+    private MutableLiveData<Uri> uriMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<ProductoViewState> estado = new MutableLiveData<>();
+    private MutableLiveData<Boolean> productoGuardadoFlag = new MutableLiveData<>();
+    private Producto productoOriginal;
     private Context context;
+
     public CrearProductoViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
     }
-    public MutableLiveData<Uri> getUriMutableLiveData() {
-        if (uriMutableLiveData == null) {
-            uriMutableLiveData = new MutableLiveData<>();
-        }
-        return uriMutableLiveData;
-    }
-    public MutableLiveData<Bitmap> getmFoto() {
-        if (mFoto == null) {
-            mFoto = new MutableLiveData<>();
-        }
-        return mFoto;
-    }
 
-    public MutableLiveData<ProductoViewState> getEstado() {
-        if(estado == null){
-            estado = new MutableLiveData<>();
-        }
-        return estado;
-    }
+    public LiveData<Uri> getUriMutableLiveData() { return uriMutableLiveData; }
+    public LiveData<ProductoViewState> getEstado() { return estado; }
+    public LiveData<Boolean> getProductoGuardadoFlag() { return productoGuardadoFlag; }
 
     public void recibirFoto(ActivityResult result) {
-        if (result.getResultCode() == RESULT_OK) {
-            Intent data = result.getData();
-            uri = data.getData();
-            uriMutableLiveData.setValue(uri);
+        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+            uriMutableLiveData.setValue(result.getData().getData());
         }
-    }
-    private MutableLiveData<Boolean> productoGuardadoFlag = new MutableLiveData<>();
-
-    public LiveData<Boolean> getProductoGuardadoFlag() {
-        return productoGuardadoFlag;
     }
 
     public void iniciar(Bundle arguments) {
         if (arguments != null && arguments.containsKey(Constantes.KEY_PRODUCTO_EDITAR)) {
-            // MODO EDITAR
             this.productoOriginal = (Producto) arguments.getSerializable(Constantes.KEY_PRODUCTO_EDITAR);
-            String descTipo ="";
-            if(productoOriginal.getIdTipo() == 1){
-                descTipo = "Comida";
-            }else if(productoOriginal.getIdTipo() == 2){
-                descTipo = "Bebida";
-            }
-            // Creamos un ViewState a partir del producto existente
-            ProductoViewState estadoDeEdicion = new ProductoViewState(
+            String descTipo = (productoOriginal.getIdTipo() == 1) ? "Comida" : "Bebida";
+            estado.setValue(new ProductoViewState(
                     productoOriginal.getNombre(),
                     productoOriginal.getDescripcion(),
                     productoOriginal.getPrecio() != null ? productoOriginal.getPrecio().toString() : "",
                     Constantes.URL_BASE + productoOriginal.getFoto(),
                     descTipo
-
-            );
-            arguments.clear();
-            estado.setValue(estadoDeEdicion);
+            ));
         } else {
-            // MODO CREAR
             this.productoOriginal = null;
-            // Creamos un ViewState con valores por defecto (vacíos)
-            ProductoViewState estadoDeCreacion = new ProductoViewState("", "", "","", "Comida");
-            estado.setValue(estadoDeCreacion);
+            estado.setValue(new ProductoViewState("", "", "", "", "Comida"));
         }
     }
+
     public void guardarProducto(String nombreProducto, String descripcionProducto,
                                 boolean estadoProducto, Uri uriImagen, Double precioProducto,
                                 String tipoProductoDesc) {
-        //buscar en la tabla tipo de la bd la descripcion que coincida con el string tipo
-        //asignarle el id del registro encontrado al idTipoProducto
+        
+        SharedPreferences sp = ApiClient.conectar(context);
+        String token = sp.getString("token", "no token");
+        
+        // Convertimos el precio para el backend
+        String precioStr = String.valueOf(precioProducto).replace('.', ',');
+
+        // Preparamos los RequestBody comunes
+        RequestBody nombre = RequestBody.create(MediaType.parse("text/plain"), nombreProducto);
+        RequestBody descripcion = RequestBody.create(MediaType.parse("text/plain"), descripcionProducto);
+        RequestBody precio = RequestBody.create(MediaType.parse("text/plain"), precioStr);
+        RequestBody estadoReq = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(estadoProducto));
+        RequestBody tipoproducto = RequestBody.create(MediaType.parse("text/plain"), tipoProductoDesc);
+
+        // Procesamos la imagen de forma SEGURA para evitar EACCES
+        MultipartBody.Part imagenFile = null;
+        if (uriImagen != null) {
+            File file = uriToTempFile(uriImagen);
+            if (file != null) {
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                imagenFile = MultipartBody.Part.createFormData("imagen", file.getName(), requestFile);
+            }
+        }
 
         if (productoOriginal != null) {
-            SharedPreferences sp = ApiClient.conectar(context);
-            String token = sp.getString("token", "no token");
-            String rutaArchivo = "";
-            // para evitar el error de null en uriImagen cuando no cambia la uriImagen,
-            // creamos los parametros en null. esto sucedia si no editabamos la imagen.
-            // y solo los seteamos si uriImagen != null
-            RequestBody imagenBody = null;
-            MultipartBody.Part imagenFile = null;
-            // para evitar que al precio se le agregue un 0 que es el que esta luego del .
-            // reemplazamos el . por la ,
-            String precioConPunto = String.valueOf(precioProducto); // Ejemplo: "10.0"
-            String precioConComa = precioConPunto.replace('.', ','); // Resultado: "10,0"
+            // MODO EDICION
+            RequestBody id = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(productoOriginal.getId()));
+            RequestBody fotoOriginal = RequestBody.create(MediaType.parse("text/plain"), productoOriginal.getFoto());
 
-
-
-
-            if(uriImagen != null){
-                rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
-                File archivo = new File(rutaArchivo);
-                imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
-                imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
-
-
-            }
-
-            RequestBody id = RequestBody.create(MediaType.parse("application/json"), String.valueOf(productoOriginal.getId()));
-            RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
-            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), precioConComa);
-            RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
-            RequestBody foto = RequestBody.create(MediaType.parse("application/json"), rutaArchivo);
-            RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
-            RequestBody tipoproducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
-
-
-
-
-            Call<Producto> productoCall = ApiClient.getEndPoints().editarProducto(token,  imagenFile,
-                    nombre, descripcion, precio, foto, estado,tipoproducto, id);
-            productoCall.enqueue(new Callback<Producto>() {
-                @Override
-                public void onResponse(Call<Producto> call, Response<Producto> response) {
-                    Toast.makeText(context, "Producto Editado con Exito", Toast.LENGTH_LONG).show();
-                    productoGuardadoFlag.setValue(true);
-                }
-
-                @Override
-                public void onFailure(Call<Producto> call, Throwable throwable) {
-                    Toast.makeText(context, "Error al editar Producto"+ throwable.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.d("salida",throwable.getMessage());
-                }
-            });
-
-            // Log.d("ViewModel", "Actualizando producto: " + productoOriginal.getId());
+            ApiClient.getEndPoints().editarProducto(token, imagenFile, nombre, descripcion, precio, fotoOriginal, estadoReq, tipoproducto, id)
+                    .enqueue(new Callback<Producto>() {
+                        @Override
+                        public void onResponse(Call<Producto> call, Response<Producto> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(context, "Producto Editado", Toast.LENGTH_SHORT).show();
+                                productoGuardadoFlag.setValue(true);
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Producto> call, Throwable t) {
+                            Log.e("API_ERROR", t.getMessage());
+                        }
+                    });
         } else {
-            SharedPreferences sp = ApiClient.conectar(context);
-            String token = sp.getString("token", "no token");
-            String rutaArchivo = RealPathUtil.getRealPath(context, uriImagen);
-            File archivo = new File(rutaArchivo);
-            // para evitar que al precio se le agregue un 0 que es el que esta luego del .
-            // reemplazamos el . por la ,
-            String precioConPunto = String.valueOf(precioProducto); // Ejemplo: "10.0"
-            String precioConComa = precioConPunto.replace('.', ','); // Resultado: "10,0"
-
-            RequestBody nombre = RequestBody.create(MediaType.parse("application/json"),nombreProducto);
-            RequestBody descripcion = RequestBody.create(MediaType.parse("application/json"), descripcionProducto);
-            RequestBody precio = RequestBody.create(MediaType.parse("application/json"),precioConComa);
-            RequestBody estado = RequestBody.create(MediaType.parse("application/json"), String.valueOf(estadoProducto));
-            RequestBody imagenBody = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
-            MultipartBody.Part imagenFile = MultipartBody.Part.createFormData("imagen", archivo.getName(), imagenBody);
-            RequestBody tipoproducto = RequestBody.create(MediaType.parse("application/json"), tipoProductoDesc);
-
-
-
-            Call<Producto> productoCall = ApiClient.getEndPoints().altaProducto(token,  imagenFile,
-                    nombre, descripcion, precio, tipoproducto, estado);
-            productoCall.enqueue(new Callback<Producto>() {
-                @Override
-                public void onResponse(Call<Producto> call, Response<Producto> response) {
-                    Toast.makeText(context, "Producto Guardado con Exito", Toast.LENGTH_LONG).show();
-                    productoGuardadoFlag.setValue(true);
-
-                }
-
-                @Override
-                public void onFailure(Call<Producto> call, Throwable throwable) {
-                    Toast.makeText(context, "Error al guardar Producto"+ throwable.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.d("salida",throwable.getMessage());
-                }
-            });
+            // MODO ALTA
+            if (imagenFile == null) {
+                Toast.makeText(context, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            ApiClient.getEndPoints().altaProducto(token, imagenFile, nombre, descripcion, precio, tipoproducto, estadoReq)
+                    .enqueue(new Callback<Producto>() {
+                        @Override
+                        public void onResponse(Call<Producto> call, Response<Producto> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(context, "Producto Guardado", Toast.LENGTH_SHORT).show();
+                                productoGuardadoFlag.setValue(true);
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Producto> call, Throwable t) {
+                            Log.e("API_ERROR", t.getMessage());
+                        }
+                    });
         }
-        // Aquí podrías emitir un nuevo estado para indicar "Guardado con éxito" o navegar hacia atrás.
     }
 
+    // --- EL FIX CLAVE PARA EL ERROR EACCES ---
+    private File uriToTempFile(Uri uri) {
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(uri);
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+            File tempFile = new File(context.getCacheDir(), "IMG_" + timeStamp + ".jpg");
+            OutputStream outputStream = new FileOutputStream(tempFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+            return tempFile;
+        } catch (Exception e) {
+            Log.e("FILE_ERROR", "Error al crear archivo temporal: " + e.getMessage());
+            return null;
+        }
+    }
 }
